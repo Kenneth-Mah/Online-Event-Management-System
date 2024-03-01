@@ -5,6 +5,8 @@
  */
 package session;
 
+import entity.Member;
+import error.InputDataValidationException;
 import javax.ejb.Local;
 
 /**
@@ -13,5 +15,7 @@ import javax.ejb.Local;
  */
 @Local
 public interface MemberSessionLocal {
+    
+    public Long createMember(Member m) throws InputDataValidationException;
     
 }
