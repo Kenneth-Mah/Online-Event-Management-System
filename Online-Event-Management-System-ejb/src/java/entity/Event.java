@@ -6,22 +6,46 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
- * @author User
+ * @author Member
  */
 @Entity
 public class Event implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    private String title;
+    private String location;
+    private String description;
+    
+    @Temporal(TemporalType.DATE)
+    private Date date;
+    
+    @Temporal(TemporalType.DATE)
+    private Date deadline;
+    
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "organisingEvents")
+    private ArrayList<Member> organisingMembers;
+    
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "event")
+    private ArrayList<Attendence> attendences;
 
     public Long getId() {
         return id;
@@ -54,6 +78,104 @@ public class Event implements Serializable {
     @Override
     public String toString() {
         return "entity.Event[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the title
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * @param title the title to set
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /**
+     * @return the location
+     */
+    public String getLocation() {
+        return location;
+    }
+
+    /**
+     * @param location the location to set
+     */
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    
+    /**
+     * @return the date
+     */
+    public Date getDate() {
+        return date;
+    }
+
+    /**
+     * @param date the date to set
+     */
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    /**
+     * @return the deadline
+     */
+    public Date getDeadline() {
+        return deadline;
+    }
+
+    /**
+     * @param deadline the deadline to set
+     */
+    public void setDeadline(Date deadline) {
+        this.deadline = deadline;
+    }
+
+    /**
+     * @return the organisingMembers
+     */
+    public ArrayList<Member> getOrganisingMembers() {
+        return organisingMembers;
+    }
+
+    /**
+     * @param organisingMembers the organisingMembers to set
+     */
+    public void setOrganisingMembers(ArrayList<Member> organisingMembers) {
+        this.organisingMembers = organisingMembers;
+    }
+
+    /**
+     * @return the attendences
+     */
+    public ArrayList<Attendence> getAttendences() {
+        return attendences;
+    }
+
+    /**
+     * @param attendences the attendences to set
+     */
+    public void setAttendences(ArrayList<Attendence> attendences) {
+        this.attendences = attendences;
     }
     
 }

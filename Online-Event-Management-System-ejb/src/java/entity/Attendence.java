@@ -6,22 +6,33 @@
 package entity;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
- * @author User
+ * @author Member
  */
 @Entity
 public class Attendence implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    private Boolean hasAttended;
+    
+    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    private Member member;
+    
+    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    private Event event;
 
     public Long getId() {
         return id;
@@ -54,6 +65,20 @@ public class Attendence implements Serializable {
     @Override
     public String toString() {
         return "entity.Attendence[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the hasAttended
+     */
+    public Boolean getHasAttended() {
+        return hasAttended;
+    }
+
+    /**
+     * @param hasAttended the hasAttended to set
+     */
+    public void setHasAttended(Boolean hasAttended) {
+        this.hasAttended = hasAttended;
     }
     
 }
