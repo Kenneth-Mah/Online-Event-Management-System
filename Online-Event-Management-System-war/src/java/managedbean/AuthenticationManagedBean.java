@@ -10,6 +10,8 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import session.MemberSessionLocal;
 
@@ -35,6 +37,8 @@ public class AuthenticationManagedBean implements Serializable {
     }
     
     public String signup(ActionEvent evt) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        
         Member m = new Member();
         m.setUsername(username);
         m.setPassword(password);
@@ -48,7 +52,9 @@ public class AuthenticationManagedBean implements Serializable {
             username = null;
             password = null;
             memberId = -1L;
-            return "signup.xhtml";
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+                    "Error", "Username already exists"));
+            return null;
         }
     }
 
