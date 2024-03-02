@@ -28,9 +28,30 @@
 
                 <h:outputLabel for="password">Password: </h:outputLabel>
                 <h:panelGroup>
-                    <p:inputText id="password" value="#{authenticationManagedBean.password}" 
-                                 required="true" requiredMessage="Password is required" />
+                    <p:password id="password" value="#{authenticationManagedBean.password}"
+                                required="true" requiredMessage="Password is required" />
                     <p:message for="password" />
+                </h:panelGroup>
+                
+                <h:outputLabel for="name">Name: </h:outputLabel>
+                <h:panelGroup>
+                    <p:inputText id="name" value="#{authenticationManagedBean.name}" 
+                                 required="true" requiredMessage="Name is required" />
+                    <p:message for="name" />
+                </h:panelGroup>
+                
+                <h:outputLabel for="phone">Phone: </h:outputLabel>
+                <h:panelGroup>
+                    <p:inputText id="phone" value="#{authenticationManagedBean.phone}" 
+                                 required="true" requiredMessage="Phone is required" />
+                    <p:message for="phone" />
+                </h:panelGroup>
+                
+                <h:outputLabel for="email">Email: </h:outputLabel>
+                <h:panelGroup>
+                    <p:inputText id="email" value="#{authenticationManagedBean.email}" 
+                                 required="true" requiredMessage="Email is required" />
+                    <p:message for="email" />
                 </h:panelGroup>
             </p:panelGrid>
             <br />

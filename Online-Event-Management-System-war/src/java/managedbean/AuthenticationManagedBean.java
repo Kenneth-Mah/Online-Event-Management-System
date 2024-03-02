@@ -6,6 +6,7 @@
 package managedbean;
 
 import entity.Member;
+import java.io.IOException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -22,37 +23,41 @@ import session.MemberSessionLocal;
 @Named(value = "authenticationManagedBean")
 @SessionScoped
 public class AuthenticationManagedBean implements Serializable {
-    
+
     @EJB
     private MemberSessionLocal memberSessionLocal;
-    
+
+    private Long memberId = -1L;
+
     private String username = null;
     private String password = null;
-    private Long memberId = -1L;
+    private String name;
+    private String phone;
+    private String email;
 
     /**
      * Creates a new instance of AuthenticationManagedBean
      */
     public AuthenticationManagedBean() {
     }
-    
-    public String signup(ActionEvent evt) {
+
+    public String signup(ActionEvent evt) throws IOException {
         FacesContext context = FacesContext.getCurrentInstance();
-        
+
         Member m = new Member();
         m.setUsername(username);
         m.setPassword(password);
-        
+        m.setName(name);
+        m.setPhone(phone);
+        m.setEmail(email);
+
         try {
             memberId = memberSessionLocal.createMember(m);
-            
+
             return "index.xhtml";
         } catch (Exception e) {
             //signup failed
-            username = null;
-            password = null;
-            memberId = -1L;
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Error", "Username already exists"));
             return null;
         }
@@ -81,5 +86,29 @@ public class AuthenticationManagedBean implements Serializable {
     public void setMemberId(Long memberId) {
         this.memberId = memberId;
     }
-    
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
 }
