@@ -70,7 +70,7 @@ public class AuthenticationManagedBean implements Serializable {
             memberId = memberSessionLocal.login(username, password);
             
             //do redirect
-            return "/secret/secret.xhtml?faces-redirect=true";
+            return "/secret/searchEvent.xhtml?faces-redirect=true";
         } catch (Exception ex) {
             //login failed
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -82,12 +82,12 @@ public class AuthenticationManagedBean implements Serializable {
         }
     }
     
-     public String logout() {
+     public String logout(ActionEvent evt) {
         username = null;
         password = null;
         memberId = -1L;
         
-        return "/login.xhtml?faces-redirect=true";
+        return "/index.xhtml?faces-redirect=true";
     }
 
     public String getUsername() {
