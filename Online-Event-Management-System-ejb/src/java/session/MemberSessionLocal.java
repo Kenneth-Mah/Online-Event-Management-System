@@ -7,6 +7,8 @@ package session;
 
 import entity.Member;
 import error.InputDataValidationException;
+import error.InvalidLoginCredentialException;
+import error.NoResultException;
 import javax.ejb.Local;
 
 /**
@@ -17,5 +19,9 @@ import javax.ejb.Local;
 public interface MemberSessionLocal {
     
     public Long createMember(Member m) throws InputDataValidationException;
+    
+    public Member retrieveMemberByUsername(String username) throws NoResultException;
+    
+    public Long login(String username, String password) throws InvalidLoginCredentialException;
     
 }

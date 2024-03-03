@@ -7,10 +7,13 @@ package session;
 
 import entity.Member;
 import error.InputDataValidationException;
+import error.InvalidLoginCredentialException;
+import error.NoResultException;
 import java.util.Set;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -51,6 +54,33 @@ public class MemberSession implements MemberSessionLocal {
         }
     }
     
+    @Override
+    public Member retrieveMemberByUsername(String username) throws NoResultException {
+        Query query = em.createQuery("SELECT m FROM Member m WHERE m.username = :inUsername");
+        query.setParameter("inUsername", username);
+        
+        try {
+            return (Member) query.getSingleResult();
+        } catch (Exception ex) {
+            throw new NoResultException("Member Username " + username + " does not exist");
+        }
+    }
+    
+    @Override
+    public Long login(String username, String password) throws InvalidLoginCredentialException {
+        try {
+            Member m = retrieveMemberByUsername(username);
+
+            if (m.getPassword().equals(password)) {
+                return m.getId();
+            } else {
+                throw new InvalidLoginCredentialException("Username does not exist or invalid password");
+            }
+        } catch (NoResultException ex) {
+            throw new InvalidLoginCredentialException("Username does not exist or invalid password");
+        }
+    }
+    
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Member>> constraintViolations) {
         String msg = "Input data validation error!:";
 
@@ -60,5 +90,5 @@ public class MemberSession implements MemberSessionLocal {
 
         return msg;
     }
-    
+
 }

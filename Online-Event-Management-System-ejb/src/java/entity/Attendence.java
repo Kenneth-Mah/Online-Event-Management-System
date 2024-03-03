@@ -80,5 +80,33 @@ public class Attendence implements Serializable {
     public void setHasAttended(Boolean hasAttended) {
         this.hasAttended = hasAttended;
     }
+
+    /**
+     * @return the member
+     */
+    public Member getMember() {
+        return member;
+    }
+
+    /**
+     * @param member the member to set
+     */
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
+    /**
+     * @return the event
+     */
+    public Event getEvent() {
+        return event;
+    }
+
+    /**
+     * @param event the event to set
+     */
+    public void setEvent(Event event) {
+        this.event = event;
+    }
     
 }

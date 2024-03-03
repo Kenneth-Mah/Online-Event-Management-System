@@ -54,13 +54,40 @@ public class AuthenticationManagedBean implements Serializable {
         try {
             memberId = memberSessionLocal.createMember(m);
 
-            return "index.xhtml";
-        } catch (Exception e) {
+            return "index.xhtml?faces-redirect=true";
+        } catch (Exception ex) {
             //signup failed
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Error", "Username already exists"));
             return null;
         }
+    }
+    
+    public String login(ActionEvent evt) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        try {
+            //store the logged in user id
+            memberId = memberSessionLocal.login(username, password);
+            
+            //do redirect
+            return "/secret/secret.xhtml?faces-redirect=true";
+        } catch (Exception ex) {
+            //login failed
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Error", "Username or password incorrect"));
+            username = null;
+            password = null;
+            memberId = -1L;
+            return null;
+        }
+    }
+    
+     public String logout() {
+        username = null;
+        password = null;
+        memberId = -1L;
+        
+        return "/login.xhtml?faces-redirect=true";
     }
 
     public String getUsername() {
