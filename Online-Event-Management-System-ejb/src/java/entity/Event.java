@@ -47,6 +47,11 @@ public class Event implements Serializable {
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "event")
     private ArrayList<Attendence> attendences;
 
+    public Event() {
+        this.organisingMembers = new ArrayList<>();
+        this.attendences = new ArrayList<>();
+    }
+
     public Long getId() {
         return id;
     }

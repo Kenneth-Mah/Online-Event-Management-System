@@ -18,10 +18,12 @@ import javax.ejb.Local;
 @Local
 public interface MemberSessionLocal {
     
-    public Long createMember(Member m) throws InputDataValidationException;
+    public Long createMember(Member newMember) throws InputDataValidationException;
     
     public Member retrieveMemberByUsername(String username) throws NoResultException;
     
     public Long login(String username, String password) throws InvalidLoginCredentialException;
+    
+    public Member retrieveMemberByMemberId(Long memberId) throws NoResultException;
     
 }

@@ -43,6 +43,11 @@ public class Member implements Serializable {
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "member")
     private ArrayList<Attendence> attendences;
 
+    public Member() {
+        this.organisingEvents = new ArrayList<>();
+        this.attendences = new ArrayList<>();
+    }
+
     public Long getId() {
         return id;
     }

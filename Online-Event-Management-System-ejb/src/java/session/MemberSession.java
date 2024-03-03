@@ -41,17 +41,27 @@ public class MemberSession implements MemberSessionLocal {
     // "Insert Code > Add Business Method")
 
     @Override
-    public Long createMember(Member m) throws InputDataValidationException {
-        Set<ConstraintViolation<Member>> constraintViolations = validator.validate(m);
+    public Long createMember(Member newMember) throws InputDataValidationException {
+        Set<ConstraintViolation<Member>> constraintViolations = validator.validate(newMember);
         
         if (constraintViolations.isEmpty()) {
-            em.persist(m);
+            em.persist(newMember);
             em.flush();
             
-            return m.getId();
+            return newMember.getId();
         } else {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
+    }
+    
+    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Member>> constraintViolations) {
+        String msg = "Input data validation error!:";
+
+        for (ConstraintViolation constraintViolation : constraintViolations) {
+            msg += "\n\t" + constraintViolation.getPropertyPath() + " - " + constraintViolation.getInvalidValue() + "; " + constraintViolation.getMessage();
+        }
+
+        return msg;
     }
     
     @Override
@@ -69,10 +79,10 @@ public class MemberSession implements MemberSessionLocal {
     @Override
     public Long login(String username, String password) throws InvalidLoginCredentialException {
         try {
-            Member m = retrieveMemberByUsername(username);
+            Member member = retrieveMemberByUsername(username);
 
-            if (m.getPassword().equals(password)) {
-                return m.getId();
+            if (member.getPassword().equals(password)) {
+                return member.getId();
             } else {
                 throw new InvalidLoginCredentialException("Username does not exist or invalid password");
             }
@@ -80,15 +90,16 @@ public class MemberSession implements MemberSessionLocal {
             throw new InvalidLoginCredentialException("Username does not exist or invalid password");
         }
     }
-    
-    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Member>> constraintViolations) {
-        String msg = "Input data validation error!:";
 
-        for (ConstraintViolation constraintViolation : constraintViolations) {
-            msg += "\n\t" + constraintViolation.getPropertyPath() + " - " + constraintViolation.getInvalidValue() + "; " + constraintViolation.getMessage();
+    @Override
+    public Member retrieveMemberByMemberId(Long memberId) throws NoResultException {
+        Member member = em.find(Member.class, memberId);
+        
+        if (member != null) {
+            return member;
+        } else {
+            throw new NoResultException("Member ID " + memberId + " does not exist");
         }
-
-        return msg;
     }
-
+    
 }

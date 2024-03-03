@@ -44,17 +44,17 @@ public class AuthenticationManagedBean implements Serializable {
     public String signup(ActionEvent evt) throws IOException {
         FacesContext context = FacesContext.getCurrentInstance();
 
-        Member m = new Member();
-        m.setUsername(username);
-        m.setPassword(password);
-        m.setName(name);
-        m.setPhone(phone);
-        m.setEmail(email);
+        Member newMember = new Member();
+        newMember.setUsername(username);
+        newMember.setPassword(password);
+        newMember.setName(name);
+        newMember.setPhone(phone);
+        newMember.setEmail(email);
 
         try {
-            memberId = memberSessionLocal.createMember(m);
+            memberId = memberSessionLocal.createMember(newMember);
 
-            return "index.xhtml?faces-redirect=true";
+            return "/secret/searchEvent.xhtml?faces-redirect=true";
         } catch (Exception ex) {
             //signup failed
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
