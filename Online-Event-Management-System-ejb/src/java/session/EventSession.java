@@ -94,7 +94,8 @@ public class EventSession implements EventSessionLocal {
                     + "e.isCancelled = FALSE");
             q.setParameter("name", "%" + title.toLowerCase() + "%");
         } else {
-            q = em.createQuery("SELECT e FROM Event e");
+            q = em.createQuery("SELECT e FROM Event e WHERE "
+                    + "e.isCancelled = FALSE");
         }
 
         return q.getResultList();
