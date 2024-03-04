@@ -7,6 +7,7 @@ package session;
 
 import entity.Event;
 import error.NoResultException;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -17,5 +18,7 @@ import javax.ejb.Local;
 public interface EventSessionLocal {
     
     public void createEvent(Long memberId, Event newEvent) throws NoResultException;
+    
+    public List<Event> searchEventsByTitle(String title);
     
 }

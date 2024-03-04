@@ -37,10 +37,10 @@ public class Member implements Serializable {
     private String phone;
     private String email;
     
-    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @ManyToMany
     private ArrayList<Event> organisingEvents;
     
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "member")
+    @OneToMany(mappedBy = "member")
     private ArrayList<Attendence> attendences;
 
     public Member() {

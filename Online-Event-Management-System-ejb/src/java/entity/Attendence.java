@@ -28,10 +28,10 @@ public class Attendence implements Serializable {
     
     private Boolean hasAttended;
     
-    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @ManyToOne
     private Member member;
     
-    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @ManyToOne
     private Event event;
 
     public Long getId() {

@@ -10,6 +10,8 @@ import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -36,11 +38,18 @@ public class EventManagedBean implements Serializable {
     private String description;
     private Date date;
     private Date deadline;
+    
+    private List<Event> events;
 
     /**
      * Creates a new instance of EventManagedBean
      */
     public EventManagedBean() {
+    }
+    
+    @PostConstruct
+    public void init() {
+        events = eventSessionLocal.searchEventsByTitle(null);
     }
     
     public String createEvent(ActionEvent evt) {
@@ -102,6 +111,14 @@ public class EventManagedBean implements Serializable {
 
     public void setDeadline(Date deadline) {
         this.deadline = deadline;
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
     }
     
 }

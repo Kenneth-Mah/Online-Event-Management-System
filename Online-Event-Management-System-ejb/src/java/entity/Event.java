@@ -41,10 +41,10 @@ public class Event implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date deadline;
     
-    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "organisingEvents")
+    @ManyToMany(mappedBy = "organisingEvents")
     private ArrayList<Member> organisingMembers;
     
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "event")
+    @OneToMany(mappedBy = "event")
     private ArrayList<Attendence> attendences;
 
     public Event() {
