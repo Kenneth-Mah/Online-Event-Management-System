@@ -54,7 +54,7 @@ public class AuthenticationManagedBean implements Serializable {
         try {
             memberId = memberSessionLocal.createMember(newMember);
 
-            return "/secret/searchEvent.xhtml?faces-redirect=true";
+            return "/secret/organisingEvents.xhtml?faces-redirect=true";
         } catch (Exception ex) {
             //signup failed
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -70,7 +70,7 @@ public class AuthenticationManagedBean implements Serializable {
             memberId = memberSessionLocal.login(username, password);
             
             //do redirect
-            return "/secret/searchEvent.xhtml?faces-redirect=true";
+            return "/secret/organisingEvents.xhtml?faces-redirect=true";
         } catch (Exception ex) {
             //login failed
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -86,6 +86,10 @@ public class AuthenticationManagedBean implements Serializable {
         username = null;
         password = null;
         memberId = -1L;
+        
+        name = null;
+        phone = null;
+        email = null;
         
         return "/index.xhtml?faces-redirect=true";
     }

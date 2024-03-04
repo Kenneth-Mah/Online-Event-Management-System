@@ -42,11 +42,56 @@ public class EventSession implements EventSessionLocal {
     }
 
     @Override
+    public List<Event> retrieveEventsByMemberId(Long memberId) throws NoResultException {
+        Member member = memberSessionLocal.retrieveMemberByMemberId(memberId);
+        Query query = em.createQuery("SELECT e FROM Event e WHERE :member MEMBER OF e.organisingMembers");
+        query.setParameter("member", member);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public Event retrieveEventByEventId(Long eventId) throws NoResultException {
+        Event event = em.find(Event.class, eventId);
+        
+        if (event != null) {
+            return event;
+        } else {
+            throw new NoResultException("Event ID " + eventId + " does not exist");
+        }
+    }
+
+    @Override
+    public Boolean isEventInUse(Long eventId) throws NoResultException {
+        Event event = retrieveEventByEventId(eventId);
+        
+        if (event.getAttendences().size() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public void deleteEvent(Long eventId) throws NoResultException {
+        if (!isEventInUse(eventId)) {
+            Event eventToRemove = retrieveEventByEventId(eventId);
+            
+            em.remove(eventToRemove);
+        } else {
+            Event eventToCancel = retrieveEventByEventId(eventId);
+            
+            eventToCancel.setIsCancelled(true);
+        }
+    }
+    
+    @Override
     public List<Event> searchEventsByTitle(String title) {
         Query q;
         if (title != null) {
             q = em.createQuery("SELECT e FROM Event e WHERE "
-                    + "LOWER(e.title) LIKE :title");
+                    + "LOWER(e.title) LIKE :title AND " 
+                    + "e.isCancelled = FALSE");
             q.setParameter("name", "%" + title.toLowerCase() + "%");
         } else {
             q = em.createQuery("SELECT e FROM Event e");
@@ -54,4 +99,5 @@ public class EventSession implements EventSessionLocal {
 
         return q.getResultList();
     }
+    
 }

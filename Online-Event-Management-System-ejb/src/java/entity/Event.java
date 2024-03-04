@@ -8,9 +8,7 @@ package entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -40,6 +38,8 @@ public class Event implements Serializable {
     
     @Temporal(TemporalType.DATE)
     private Date deadline;
+    
+    private Boolean isCancelled = false;
     
     @ManyToMany(mappedBy = "organisingEvents")
     private ArrayList<Member> organisingMembers;
@@ -153,6 +153,20 @@ public class Event implements Serializable {
      */
     public void setDeadline(Date deadline) {
         this.deadline = deadline;
+    }
+    
+    /**
+     * @return the isCancelled
+     */
+    public Boolean getIsCancelled() {
+        return isCancelled;
+    }
+
+    /**
+     * @param isCancelled the isCancelled to set
+     */
+    public void setIsCancelled(Boolean isCancelled) {
+        this.isCancelled = isCancelled;
     }
 
     /**

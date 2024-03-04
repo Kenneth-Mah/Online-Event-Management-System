@@ -19,6 +19,14 @@ public interface EventSessionLocal {
     
     public void createEvent(Long memberId, Event newEvent) throws NoResultException;
     
+    public List<Event> retrieveEventsByMemberId(Long memberId) throws NoResultException;
+    
+    public Event retrieveEventByEventId(Long eventId) throws NoResultException;
+    
+    public Boolean isEventInUse(Long eventId) throws NoResultException;
+    
+    public void deleteEvent(Long eventId) throws NoResultException;
+    
     public List<Event> searchEventsByTitle(String title);
     
 }
