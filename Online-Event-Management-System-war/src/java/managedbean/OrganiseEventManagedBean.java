@@ -52,7 +52,7 @@ public class OrganiseEventManagedBean implements Serializable {
     public void init() {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
-            events = eventSessionLocal.retrieveEventsByMemberId(authenticationManagedBean.getMemberId());
+            events = eventSessionLocal.retrieveOrganisingEventsByMemberId(authenticationManagedBean.getMemberId());
         } catch (Exception ex) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Member does not exist"));
         }

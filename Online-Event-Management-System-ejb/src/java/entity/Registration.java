@@ -6,9 +6,7 @@
 package entity;
 
 import java.io.Serializable;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,14 +17,14 @@ import javax.persistence.ManyToOne;
  * @author Member
  */
 @Entity
-public class Attendence implements Serializable {
+public class Registration implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    private Boolean hasAttended;
+    private Boolean hasAttended = false;
     
     @ManyToOne
     private Member member;
@@ -52,10 +50,10 @@ public class Attendence implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Attendence)) {
+        if (!(object instanceof Registration)) {
             return false;
         }
-        Attendence other = (Attendence) object;
+        Registration other = (Registration) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

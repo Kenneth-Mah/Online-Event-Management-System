@@ -19,7 +19,7 @@ public interface EventSessionLocal {
     
     public void createEvent(Long memberId, Event newEvent) throws NoResultException;
     
-    public List<Event> retrieveEventsByMemberId(Long memberId) throws NoResultException;
+    public List<Event> retrieveOrganisingEventsByMemberId(Long memberId) throws NoResultException;
     
     public Event retrieveEventByEventId(Long eventId) throws NoResultException;
     

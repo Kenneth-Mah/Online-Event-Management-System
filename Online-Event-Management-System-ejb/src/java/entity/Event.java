@@ -45,11 +45,11 @@ public class Event implements Serializable {
     private ArrayList<Member> organisingMembers;
     
     @OneToMany(mappedBy = "event")
-    private ArrayList<Attendence> attendences;
+    private ArrayList<Registration> registrations;
 
     public Event() {
         this.organisingMembers = new ArrayList<>();
-        this.attendences = new ArrayList<>();
+        this.registrations = new ArrayList<>();
     }
 
     public Long getId() {
@@ -184,17 +184,17 @@ public class Event implements Serializable {
     }
 
     /**
-     * @return the attendences
+     * @return the registrations
      */
-    public ArrayList<Attendence> getAttendences() {
-        return attendences;
+    public ArrayList<Registration> getRegistrations() {
+        return registrations;
     }
 
     /**
-     * @param attendences the attendences to set
+     * @param registrations the registrations to set
      */
-    public void setAttendences(ArrayList<Attendence> attendences) {
-        this.attendences = attendences;
+    public void setRegistrations(ArrayList<Registration> registrations) {
+        this.registrations = registrations;
     }
     
 }

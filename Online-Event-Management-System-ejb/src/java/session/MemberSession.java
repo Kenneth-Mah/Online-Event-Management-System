@@ -28,7 +28,7 @@ public class MemberSession implements MemberSessionLocal {
 
     @PersistenceContext
     private EntityManager em;
-    
+
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
 
@@ -39,21 +39,20 @@ public class MemberSession implements MemberSessionLocal {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-
     @Override
     public Long createMember(Member newMember) throws InputDataValidationException {
         Set<ConstraintViolation<Member>> constraintViolations = validator.validate(newMember);
-        
+
         if (constraintViolations.isEmpty()) {
             em.persist(newMember);
             em.flush();
-            
+
             return newMember.getId();
         } else {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
-    
+
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Member>> constraintViolations) {
         String msg = "Input data validation error!:";
 
@@ -63,19 +62,21 @@ public class MemberSession implements MemberSessionLocal {
 
         return msg;
     }
-    
+
     @Override
     public Member retrieveMemberByUsername(String username) throws NoResultException {
-        Query query = em.createQuery("SELECT m FROM Member m WHERE m.username = :inUsername");
+        Query query = em.createQuery(
+                "SELECT m FROM Member m "
+                + "WHERE m.username = :inUsername");
         query.setParameter("inUsername", username);
-        
+
         try {
             return (Member) query.getSingleResult();
         } catch (Exception ex) {
             throw new NoResultException("Member Username " + username + " does not exist");
         }
     }
-    
+
     @Override
     public Long login(String username, String password) throws InvalidLoginCredentialException {
         try {
@@ -94,12 +95,12 @@ public class MemberSession implements MemberSessionLocal {
     @Override
     public Member retrieveMemberByMemberId(Long memberId) throws NoResultException {
         Member member = em.find(Member.class, memberId);
-        
+
         if (member != null) {
             return member;
         } else {
             throw new NoResultException("Member ID " + memberId + " does not exist");
         }
     }
-    
+
 }

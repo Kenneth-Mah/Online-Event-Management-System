@@ -21,30 +21,32 @@ import javax.persistence.Query;
  */
 @Stateless
 public class EventSession implements EventSessionLocal {
-    
+
     @PersistenceContext
     private EntityManager em;
-    
+
     @EJB
     private MemberSessionLocal memberSessionLocal;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-
     @Override
     public void createEvent(Long memberId, Event newEvent) throws NoResultException {
-        em.persist(newEvent);
-        
         Member member = memberSessionLocal.retrieveMemberByMemberId(memberId);
-        member.getOrganisingEvents().add(newEvent);
-        
+
         newEvent.getOrganisingMembers().add(member);
+        member.getOrganisingEvents().add(newEvent);
+
+        em.persist(newEvent);
     }
 
     @Override
-    public List<Event> retrieveEventsByMemberId(Long memberId) throws NoResultException {
+    public List<Event> retrieveOrganisingEventsByMemberId(Long memberId) throws NoResultException {
         Member member = memberSessionLocal.retrieveMemberByMemberId(memberId);
-        Query query = em.createQuery("SELECT e FROM Event e WHERE :member MEMBER OF e.organisingMembers");
+        Query query = em.createQuery(
+                "SELECT e FROM Event e "
+                + "WHERE :member MEMBER OF e.organisingMembers"
+        );
         query.setParameter("member", member);
 
         return query.getResultList();
@@ -53,7 +55,7 @@ public class EventSession implements EventSessionLocal {
     @Override
     public Event retrieveEventByEventId(Long eventId) throws NoResultException {
         Event event = em.find(Event.class, eventId);
-        
+
         if (event != null) {
             return event;
         } else {
@@ -64,8 +66,8 @@ public class EventSession implements EventSessionLocal {
     @Override
     public Boolean isEventInUse(Long eventId) throws NoResultException {
         Event event = retrieveEventByEventId(eventId);
-        
-        if (event.getAttendences().size() > 0) {
+
+        if (event.getRegistrations().size() > 0) {
             return true;
         } else {
             return false;
@@ -76,29 +78,33 @@ public class EventSession implements EventSessionLocal {
     public void deleteEvent(Long eventId) throws NoResultException {
         if (!isEventInUse(eventId)) {
             Event eventToRemove = retrieveEventByEventId(eventId);
-            
+
             em.remove(eventToRemove);
         } else {
             Event eventToCancel = retrieveEventByEventId(eventId);
-            
+
             eventToCancel.setIsCancelled(true);
         }
     }
-    
+
     @Override
     public List<Event> searchEventsByTitle(String title) {
         Query q;
         if (title != null) {
-            q = em.createQuery("SELECT e FROM Event e WHERE "
-                    + "LOWER(e.title) LIKE :title AND " 
-                    + "e.isCancelled = FALSE");
-            q.setParameter("name", "%" + title.toLowerCase() + "%");
+            q = em.createQuery(
+                    "SELECT e FROM Event e "
+                    + "WHERE LOWER(e.title) LIKE :title "
+                    + "AND e.isCancelled = FALSE"
+            );
+            q.setParameter("title", "%" + title.toLowerCase() + "%");
         } else {
-            q = em.createQuery("SELECT e FROM Event e WHERE "
-                    + "e.isCancelled = FALSE");
+            q = em.createQuery(
+                    "SELECT e FROM Event e "
+                    + "WHERE e.isCancelled = FALSE"
+            );
         }
 
         return q.getResultList();
     }
-    
+
 }

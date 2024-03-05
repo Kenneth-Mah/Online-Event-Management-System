@@ -7,10 +7,8 @@ package entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -41,11 +39,11 @@ public class Member implements Serializable {
     private ArrayList<Event> organisingEvents;
     
     @OneToMany(mappedBy = "member")
-    private ArrayList<Attendence> attendences;
+    private ArrayList<Registration> registrations;
 
     public Member() {
         this.organisingEvents = new ArrayList<>();
-        this.attendences = new ArrayList<>();
+        this.registrations = new ArrayList<>();
     }
 
     public Long getId() {
@@ -180,17 +178,17 @@ public class Member implements Serializable {
     }
 
     /**
-     * @return the attendences
+     * @return the registrations
      */
-    public ArrayList<Attendence> getAttendences() {
-        return attendences;
+    public ArrayList<Registration> getRegistrations() {
+        return registrations;
     }
 
     /**
-     * @param attendences the attendences to set
+     * @param registrations the registrations to set
      */
-    public void setAttendences(ArrayList<Attendence> attendences) {
-        this.attendences = attendences;
+    public void setRegistrations(ArrayList<Registration> registrations) {
+        this.registrations = registrations;
     }
     
 }
