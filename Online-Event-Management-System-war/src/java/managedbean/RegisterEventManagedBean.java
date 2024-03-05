@@ -35,7 +35,9 @@ public class RegisterEventManagedBean implements Serializable {
     @EJB
     private RegistrationSessionLocal registrationSessionLocal;
     
-    private List<Event> events;
+    private List<Event> searchedEvents;
+    
+    private List<Event> registeredEvents;
 
     /**
      * Creates a new instance of RegisterEventManagedBean
@@ -46,10 +48,11 @@ public class RegisterEventManagedBean implements Serializable {
     @PostConstruct
     public void init() {
         FacesContext context = FacesContext.getCurrentInstance();
+        searchedEvents = eventSessionLocal.searchEventsByTitle(null);
         try {
-            events = eventSessionLocal.searchEventsByTitle(null);
+            registeredEvents = registrationSessionLocal.retrieveRegisteredEventsByMemberId(authenticationManagedBean.getMemberId());
         } catch (Exception ex) {
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Unknown Error"));
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Member does not exist"));
         }
     }
     
@@ -61,6 +64,7 @@ public class RegisterEventManagedBean implements Serializable {
         Long eventId = Long.parseLong(eventIdStr);
         try {
             registrationSessionLocal.createRegistration(authenticationManagedBean.getMemberId(), eventId);
+            registeredEvents = registrationSessionLocal.retrieveRegisteredEventsByMemberId(authenticationManagedBean.getMemberId());
         } catch (Exception e) {
             //show with an error icon
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Unable to register for event"));
@@ -68,13 +72,38 @@ public class RegisterEventManagedBean implements Serializable {
         }
         context.addMessage(null, new FacesMessage("Success", "Successfully registered for event"));
     }
-
-    public List<Event> getEvents() {
-        return events;
+    
+    public void unregisterFromEvent() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map<String, String> params = context.getExternalContext()
+                .getRequestParameterMap();
+        String eventIdStr = params.get("eventId");
+        Long eventId = Long.parseLong(eventIdStr);
+        try {
+            registrationSessionLocal.deleteRegistration(authenticationManagedBean.getMemberId(), eventId);
+            registeredEvents = registrationSessionLocal.retrieveRegisteredEventsByMemberId(authenticationManagedBean.getMemberId());
+        } catch (Exception e) {
+            //show with an error icon
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Unable to unregister from event"));
+            return;
+        }
+        context.addMessage(null, new FacesMessage("Success", "Successfully unregistered from event"));
     }
 
-    public void setEvents(List<Event> events) {
-        this.events = events;
+    public List<Event> getSearchedEvents() {
+        return searchedEvents;
+    }
+
+    public void setSearchedEvents(List<Event> searchedEvents) {
+        this.searchedEvents = searchedEvents;
+    }
+
+    public List<Event> getRegisteredEvents() {
+        return registeredEvents;
+    }
+
+    public void setRegisteredEvents(List<Event> registeredEvents) {
+        this.registeredEvents = registeredEvents;
     }
     
 }

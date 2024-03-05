@@ -9,6 +9,8 @@ import entity.Registration;
 import entity.Event;
 import entity.Member;
 import error.NoResultException;
+import error.RegistrationDeletionNotAllowedException;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -50,7 +52,7 @@ public class RegistrationSession implements RegistrationSessionLocal {
         }
     }
 
-    public Boolean doesRegistrationExist(Long memberId, Long eventId) throws NoResultException {
+    private Boolean doesRegistrationExist(Long memberId, Long eventId) throws NoResultException {
         Member member = memberSessionLocal.retrieveMemberByMemberId(memberId);
         Event event = eventSessionLocal.retrieveEventByEventId(eventId);
 
@@ -69,12 +71,36 @@ public class RegistrationSession implements RegistrationSessionLocal {
     @Override
     public List<Event> retrieveRegisteredEventsByMemberId(Long memberId) throws NoResultException {
         Member member = memberSessionLocal.retrieveMemberByMemberId(memberId);
-        
+
         Query query = em.createQuery("SELECT e FROM Event e, "
                 + "IN (e.registrations) r "
                 + "WHERE r.member = :member");
         query.setParameter("member", member);
 
         return query.getResultList();
+    }
+
+    @Override
+    public void deleteRegistration(Long memberId, Long eventId) throws NoResultException, RegistrationDeletionNotAllowedException {
+        Member member = memberSessionLocal.retrieveMemberByMemberId(memberId);
+        Event event = eventSessionLocal.retrieveEventByEventId(eventId);
+
+        //can only unregister before the start of the event
+        if (event.getDate().after(new Date())) {
+            Query query = em.createQuery("SELECT r FROM Registration r WHERE r.member = :member AND r.event = :event");
+            query.setParameter("member", member);
+            query.setParameter("event", event);
+
+            Registration registration = (Registration) query.getSingleResult();
+
+            registration.setMember(null);
+            registration.setEvent(null);
+            member.getRegistrations().remove(registration);
+            event.getRegistrations().remove(registration);
+
+            em.remove(registration);
+        } else {
+            throw new RegistrationDeletionNotAllowedException("Cannot unregister after start of event");
+        }
     }
 }
