@@ -8,12 +8,14 @@ package session;
 import entity.Event;
 import entity.Member;
 import error.NoResultException;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -103,6 +105,62 @@ public class EventSession implements EventSessionLocal {
                     + "WHERE e.isCancelled = FALSE"
             );
         }
+
+        return q.getResultList();
+    }
+
+    @Override
+    public List<Event> searchEventsByLocation(String location) {
+        Query q;
+        if (location != null) {
+            q = em.createQuery(
+                    "SELECT e FROM Event e "
+                    + "WHERE LOWER(e.location) LIKE :location "
+                    + "AND e.isCancelled = FALSE"
+            );
+            q.setParameter("location", "%" + location.toLowerCase() + "%");
+        } else {
+            q = em.createQuery(
+                    "SELECT e FROM Event e "
+                    + "WHERE e.isCancelled = FALSE"
+            );
+        }
+
+        return q.getResultList();
+    }
+
+    @Override
+    public List<Event> searchEventsByDescription(String description) {
+        Query q;
+        if (description != null) {
+            q = em.createQuery(
+                    "SELECT e FROM Event e "
+                    + "WHERE LOWER(e.description) LIKE :description "
+                    + "AND e.isCancelled = FALSE"
+            );
+            q.setParameter("description", "%" + description.toLowerCase() + "%");
+        } else {
+            q = em.createQuery(
+                    "SELECT e FROM Event e "
+                    + "WHERE e.isCancelled = FALSE"
+            );
+        }
+
+        return q.getResultList();
+    }
+
+    @Override
+    public List<Event> searchEventsByDate(Date date) {
+        Query q = em.createQuery("SELECT e FROM Event e WHERE e.date = :date");
+        q.setParameter("date", date, TemporalType.DATE);
+
+        return q.getResultList();
+    }
+
+    @Override
+    public List<Event> searchEventsByDeadline(Date deadline) {
+        Query q = em.createQuery("SELECT e FROM Event e WHERE e.deadline = :deadline");
+        q.setParameter("deadline", deadline, TemporalType.DATE);
 
         return q.getResultList();
     }

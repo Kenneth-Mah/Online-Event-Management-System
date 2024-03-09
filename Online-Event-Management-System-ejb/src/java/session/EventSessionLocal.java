@@ -7,6 +7,7 @@ package session;
 
 import entity.Event;
 import error.NoResultException;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -28,5 +29,13 @@ public interface EventSessionLocal {
     public void deleteEvent(Long eventId) throws NoResultException;
     
     public List<Event> searchEventsByTitle(String title);
+    
+    public List<Event> searchEventsByLocation(String location);
+    
+    public List<Event> searchEventsByDescription(String description);
+    
+    public List<Event> searchEventsByDate(Date date);
+    
+    public List<Event> searchEventsByDeadline(Date deadline);
     
 }

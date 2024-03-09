@@ -9,6 +9,9 @@ import entity.Event;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
@@ -36,6 +39,9 @@ public class RegisterEventManagedBean implements Serializable {
     private RegistrationSessionLocal registrationSessionLocal;
     
     private List<Event> searchedEvents;
+    private String searchString;
+    private String searchType = "TITLE";
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     
     private List<Event> registeredEvents;
 
@@ -53,6 +59,45 @@ public class RegisterEventManagedBean implements Serializable {
             registeredEvents = registrationSessionLocal.retrieveRegisteredEventsByMemberId(authenticationManagedBean.getMemberId());
         } catch (Exception ex) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Member does not exist"));
+        }
+    }
+    
+    public void handleSearch() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (searchString == null || searchString.equals("")) {
+            searchedEvents = eventSessionLocal.searchEventsByTitle(null);
+        } else {
+            switch (searchType) {
+                case "TITLE":
+                    searchedEvents = eventSessionLocal.searchEventsByTitle(searchString);
+                    break;
+                case "LOCATION": {
+                    searchedEvents = eventSessionLocal.searchEventsByLocation(searchString);
+                    break;
+                }
+                case "DESCRIPTION": {
+                    searchedEvents = eventSessionLocal.searchEventsByDescription(searchString);
+                    break;
+                }
+                // Searching by DATE and DEADLINE is bugged. Search returns dates one day before search date
+                case "DATE": {
+                    try {
+                        Date date = dateFormat.parse(searchString);
+                        searchedEvents = eventSessionLocal.searchEventsByDate(date);
+                    } catch (Exception ex) {
+                        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Format should be dd/mm/yyyy"));
+                    }
+                    break;
+                }
+                default:
+                    try {
+                        Date deadline = dateFormat.parse(searchString);
+                        searchedEvents = eventSessionLocal.searchEventsByDeadline(deadline);
+                    } catch (Exception ex) {
+                        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Format should be dd/mm/yyyy"));
+                    }
+                    break;
+            }
         }
     }
     
@@ -96,6 +141,22 @@ public class RegisterEventManagedBean implements Serializable {
 
     public void setSearchedEvents(List<Event> searchedEvents) {
         this.searchedEvents = searchedEvents;
+    }
+
+    public String getSearchString() {
+        return searchString;
+    }
+
+    public void setSearchString(String searchString) {
+        this.searchString = searchString;
+    }
+
+    public String getSearchType() {
+        return searchType;
+    }
+
+    public void setSearchType(String searchType) {
+        this.searchType = searchType;
     }
 
     public List<Event> getRegisteredEvents() {
