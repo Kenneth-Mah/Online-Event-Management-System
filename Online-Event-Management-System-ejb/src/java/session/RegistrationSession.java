@@ -103,4 +103,26 @@ public class RegistrationSession implements RegistrationSessionLocal {
             throw new RegistrationDeletionNotAllowedException("Cannot unregister after start of event");
         }
     }
+
+    @Override
+    public Registration retrieveRegistrationByRegistrationId(Long registrationId) throws NoResultException {
+        Registration registration = em.find(Registration.class, registrationId);
+        
+        if (registration != null) {
+            return registration;
+        } else {
+            throw new NoResultException("Registration ID " + registrationId + " does not exist");
+        }
+    }
+
+    @Override
+    public void toggleAttendence(Long registrationId) throws NoResultException {
+        Registration registration = retrieveRegistrationByRegistrationId(registrationId);
+        
+        if (registration.getHasAttended() == true) {
+            registration.setHasAttended(false);
+        } else {
+            registration.setHasAttended(true);
+        }
+    }
 }

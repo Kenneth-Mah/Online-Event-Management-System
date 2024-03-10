@@ -19,6 +19,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import session.EventSessionLocal;
+import session.RegistrationSessionLocal;
 
 /**
  *
@@ -33,6 +34,8 @@ public class OrganiseEventManagedBean implements Serializable {
     
     @EJB
     private EventSessionLocal eventSessionLocal;
+    @EJB
+    private RegistrationSessionLocal registrationSessionLocal;
     
     private String title;
     private String location;
@@ -41,6 +44,7 @@ public class OrganiseEventManagedBean implements Serializable {
     private Date deadline;
     
     private List<Event> events;
+    private Event selectedEvent;
 
     /**
      * Creates a new instance of OrganiseEventManagedBean
@@ -87,13 +91,23 @@ public class OrganiseEventManagedBean implements Serializable {
         Long eventId = Long.parseLong(eventIdStr);
         try {
             eventSessionLocal.deleteEvent(eventId);
-        } catch (Exception e) {
+        } catch (Exception ex) {
             //show with an error icon
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Unable to delete event"));
             return;
         }
         context.addMessage(null, new FacesMessage("Success", "Successfully deleted event"));
         init();
+    }
+    
+    public void toggleAttendence(Long registrationId) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        try {
+            registrationSessionLocal.toggleAttendence(registrationId);
+            this.selectedEvent = eventSessionLocal.retrieveEventByEventId(this.selectedEvent.getId());
+        } catch (Exception ex) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Unable to toggle attendence"));
+        }
     }
 
     public String getTitle() {
@@ -142,6 +156,14 @@ public class OrganiseEventManagedBean implements Serializable {
 
     public void setEvents(List<Event> events) {
         this.events = events;
+    }
+
+    public Event getSelectedEvent() {
+        return selectedEvent;
+    }
+
+    public void setSelectedEvent(Event selectedEvent) {
+        this.selectedEvent = selectedEvent;
     }
     
 }

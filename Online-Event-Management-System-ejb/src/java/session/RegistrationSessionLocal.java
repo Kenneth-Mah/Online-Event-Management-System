@@ -6,6 +6,7 @@
 package session;
 
 import entity.Event;
+import entity.Registration;
 import error.NoResultException;
 import error.RegistrationDeletionNotAllowedException;
 import java.util.List;
@@ -23,5 +24,9 @@ public interface RegistrationSessionLocal {
     public List<Event> retrieveRegisteredEventsByMemberId(Long memberId) throws NoResultException;
     
     public void deleteRegistration(Long memberId, Long eventId) throws NoResultException, RegistrationDeletionNotAllowedException;
+    
+    public Registration retrieveRegistrationByRegistrationId(Long registrationId) throws NoResultException;
+    
+    public void toggleAttendence(Long registrationId) throws NoResultException;
     
 }

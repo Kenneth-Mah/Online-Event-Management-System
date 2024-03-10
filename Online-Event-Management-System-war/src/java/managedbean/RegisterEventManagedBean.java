@@ -110,7 +110,7 @@ public class RegisterEventManagedBean implements Serializable {
         try {
             registrationSessionLocal.createRegistration(authenticationManagedBean.getMemberId(), eventId);
             registeredEvents = registrationSessionLocal.retrieveRegisteredEventsByMemberId(authenticationManagedBean.getMemberId());
-        } catch (Exception e) {
+        } catch (Exception ex) {
             //show with an error icon
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Unable to register for event"));
             return;
@@ -127,7 +127,7 @@ public class RegisterEventManagedBean implements Serializable {
         try {
             registrationSessionLocal.deleteRegistration(authenticationManagedBean.getMemberId(), eventId);
             registeredEvents = registrationSessionLocal.retrieveRegisteredEventsByMemberId(authenticationManagedBean.getMemberId());
-        } catch (Exception e) {
+        } catch (Exception ex) {
             //show with an error icon
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Unable to unregister from event"));
             return;
