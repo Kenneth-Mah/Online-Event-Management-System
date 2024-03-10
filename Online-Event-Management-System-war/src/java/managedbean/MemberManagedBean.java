@@ -49,6 +49,10 @@ public class MemberManagedBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
             member = memberSessionLocal.retrieveMemberByMemberId(authenticationManagedBean.getMemberId());
+            password = member.getPassword();
+            name = member.getName();
+            phone = member.getPhone();
+            email = member.getEmail();
         } catch (Exception ex) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Member does not exist"));
         }
