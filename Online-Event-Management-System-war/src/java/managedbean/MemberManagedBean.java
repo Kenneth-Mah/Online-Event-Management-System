@@ -13,6 +13,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import session.MemberSessionLocal;
 
@@ -50,6 +51,21 @@ public class MemberManagedBean implements Serializable {
             member = memberSessionLocal.retrieveMemberByMemberId(authenticationManagedBean.getMemberId());
         } catch (Exception ex) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Member does not exist"));
+        }
+    }
+    
+    public String updateMember(ActionEvent evt) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        member.setPassword(password);
+        member.setName(name);
+        member.setPhone(phone);
+        member.setEmail(email);
+        try {
+            memberSessionLocal.updateMember(member);
+            return "/secret/viewProfile.xhtml?faces-redirect=true";
+        } catch (Exception ex) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Unable to update member"));
+            return null;
         }
     }
 

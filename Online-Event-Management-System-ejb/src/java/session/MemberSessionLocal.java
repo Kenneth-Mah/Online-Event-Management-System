@@ -26,4 +26,6 @@ public interface MemberSessionLocal {
     
     public Member retrieveMemberByMemberId(Long memberId) throws NoResultException;
     
+    public void updateMember(Member updatedMember) throws NoResultException;
+    
 }

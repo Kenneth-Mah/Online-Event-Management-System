@@ -103,4 +103,15 @@ public class MemberSession implements MemberSessionLocal {
         }
     }
 
+    @Override
+    public void updateMember(Member updatedMember) throws NoResultException {
+        Member oldMember = retrieveMemberByMemberId(updatedMember.getId());
+        
+        // Do not allow change of username
+        oldMember.setPassword(updatedMember.getPassword());
+        oldMember.setName(updatedMember.getName());
+        oldMember.setPhone(updatedMember.getPhone());
+        oldMember.setEmail(updatedMember.getEmail());
+    }
+
 }

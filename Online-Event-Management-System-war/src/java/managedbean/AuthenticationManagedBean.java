@@ -41,7 +41,7 @@ public class AuthenticationManagedBean implements Serializable {
     public AuthenticationManagedBean() {
     }
 
-    public String signup(ActionEvent evt) throws IOException {
+    public String signup(ActionEvent evt) {
         FacesContext context = FacesContext.getCurrentInstance();
 
         Member newMember = new Member();
