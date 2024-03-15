@@ -110,6 +110,7 @@ public class MemberSession implements MemberSessionLocal {
         // Do not allow change of username
         oldMember.setPassword(updatedMember.getPassword());
         oldMember.setName(updatedMember.getName());
+        oldMember.setPhoto(updatedMember.getPhoto());
         oldMember.setPhone(updatedMember.getPhone());
         oldMember.setEmail(updatedMember.getEmail());
     }

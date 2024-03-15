@@ -6,15 +6,23 @@
 package managedbean;
 
 import entity.Member;
+import java.io.IOException;
+import java.io.InputStream;
 import javax.inject.Named;
-import javax.faces.view.ViewScoped;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.io.Serializable;
+import java.nio.file.Files;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.servlet.ServletContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
+import javax.servlet.http.Part;
 import session.MemberSessionLocal;
 
 /**
@@ -37,6 +45,9 @@ public class MemberManagedBean implements Serializable {
     private String name;
     private String phone;
     private String email;
+    
+    private Part uploadedfile;
+    private String filename = "";
 
     /**
      * Creates a new instance of MemberManagedBean
@@ -64,6 +75,36 @@ public class MemberManagedBean implements Serializable {
         member.setName(name);
         member.setPhone(phone);
         member.setEmail(email);
+        try {
+            memberSessionLocal.updateMember(member);
+            return "/secret/viewProfile.xhtml?faces-redirect=true";
+        } catch (Exception ex) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Unable to update member"));
+            return null;
+        }
+    }
+    
+    public String upload() throws IOException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ServletContext ctx = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+
+        //get the deployment path
+        String UPLOAD_DIRECTORY = ctx.getRealPath("/") + "upload/";
+        System.out.println("#UPLOAD_DIRECTORY : " + UPLOAD_DIRECTORY);
+
+        //debug purposes
+        setFilename(Paths.get(uploadedfile.getSubmittedFileName()).getFileName().toString());
+        System.out.println("filename: " + getFilename());
+        //---------------------
+        
+        //replace existing file
+        Path path = Paths.get(UPLOAD_DIRECTORY + getFilename());
+        InputStream bytes = uploadedfile.getInputStream();
+        Files.copy(bytes, path, StandardCopyOption.REPLACE_EXISTING);
+        
+        //Setting Member new photo
+        String photo = "/Online-Event-Management-System-war/upload/" + getFilename();
+        member.setPhoto(photo);
         try {
             memberSessionLocal.updateMember(member);
             return "/secret/viewProfile.xhtml?faces-redirect=true";
@@ -111,6 +152,22 @@ public class MemberManagedBean implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+    
+    public Part getUploadedfile() {
+        return uploadedfile;
+    }
+
+    public void setUploadedfile(Part uploadedfile) {
+        this.uploadedfile = uploadedfile;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
     
 }
