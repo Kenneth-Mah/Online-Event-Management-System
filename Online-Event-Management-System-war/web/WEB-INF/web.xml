@@ -8,6 +8,10 @@
         <param-name>primefaces.FONT_AWESOME</param-name>
         <param-value>true</param-value>
     </context-param>
+    <context-param>
+        <param-name>primefaces.THEME</param-name>
+        <param-value>luna-amber</param-value>
+    </context-param>
     <filter>
         <filter-name>AuthenticationFilter</filter-name>
         <filter-class>filter.AuthenticationFilter</filter-class>
