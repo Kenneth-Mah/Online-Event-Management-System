@@ -6,7 +6,6 @@
 package managedbean;
 
 import entity.Member;
-import java.io.IOException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -32,6 +31,7 @@ public class AuthenticationManagedBean implements Serializable {
     private String username = null;
     private String password = null;
     private String name;
+    private String photo;
     private String phone;
     private String email;
 
@@ -43,11 +43,15 @@ public class AuthenticationManagedBean implements Serializable {
 
     public String signup(ActionEvent evt) {
         FacesContext context = FacesContext.getCurrentInstance();
+               
+        //Setting default photo
+        photo = "/Online-Event-Management-System-war/upload/default-profile-icon.png";
 
         Member newMember = new Member();
         newMember.setUsername(username);
         newMember.setPassword(password);
         newMember.setName(name);
+        newMember.setPhoto(photo);
         newMember.setPhone(phone);
         newMember.setEmail(email);
 
@@ -130,6 +134,14 @@ public class AuthenticationManagedBean implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     public String getPhone() {

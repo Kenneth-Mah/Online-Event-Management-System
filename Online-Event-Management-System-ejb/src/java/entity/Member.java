@@ -31,7 +31,7 @@ public class Member implements Serializable {
     private String username;
     private String password;
     private String name;
-    private byte[] photo;
+    private String photo;
     private String phone;
     private String email;
     
@@ -124,14 +124,14 @@ public class Member implements Serializable {
     /**
      * @return the photo
      */
-    public byte[] getPhoto() {
+    public String getPhoto() {
         return photo;
     }
 
     /**
      * @param photo the photo to set
      */
-    public void setPhoto(byte[] photo) {
+    public void setPhoto(String photo) {
         this.photo = photo;
     }
 
