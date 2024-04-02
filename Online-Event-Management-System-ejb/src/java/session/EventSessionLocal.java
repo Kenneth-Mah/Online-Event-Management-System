@@ -6,7 +6,7 @@
 package session;
 
 import entity.Event;
-import error.NoResultException;
+import error.ResourceNotFoundException;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
@@ -18,15 +18,15 @@ import javax.ejb.Local;
 @Local
 public interface EventSessionLocal {
     
-    public void createEvent(Long memberId, Event newEvent) throws NoResultException;
+    public void createEvent(Long memberId, Event newEvent) throws ResourceNotFoundException;
     
-    public List<Event> retrieveOrganisingEventsByMemberId(Long memberId) throws NoResultException;
+    public List<Event> retrieveOrganisingEventsByMemberId(Long memberId) throws ResourceNotFoundException;
     
-    public Event retrieveEventByEventId(Long eventId) throws NoResultException;
+    public Event retrieveEventByEventId(Long eventId) throws ResourceNotFoundException;
     
-    public Boolean isEventInUse(Long eventId) throws NoResultException;
+    public Boolean isEventInUse(Long eventId) throws ResourceNotFoundException;
     
-    public void deleteEvent(Long eventId) throws NoResultException;
+    public void deleteEvent(Long eventId) throws ResourceNotFoundException;
     
     public List<Event> searchEventsByTitle(String title);
     

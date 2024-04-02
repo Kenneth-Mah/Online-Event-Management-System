@@ -8,10 +8,11 @@ package session;
 import entity.Member;
 import error.InputDataValidationException;
 import error.InvalidLoginCredentialException;
-import error.NoResultException;
+import error.ResourceNotFoundException;
 import java.util.Set;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
@@ -64,7 +65,7 @@ public class MemberSession implements MemberSessionLocal {
     }
 
     @Override
-    public Member retrieveMemberByUsername(String username) throws NoResultException {
+    public Member retrieveMemberByUsername(String username) throws ResourceNotFoundException {
         Query query = em.createQuery(
                 "SELECT m FROM Member m "
                 + "WHERE m.username = :inUsername");
@@ -72,8 +73,8 @@ public class MemberSession implements MemberSessionLocal {
 
         try {
             return (Member) query.getSingleResult();
-        } catch (Exception ex) {
-            throw new NoResultException("Member Username " + username + " does not exist");
+        } catch (NoResultException ex) {
+            throw new ResourceNotFoundException("Member Username " + username + " does not exist");
         }
     }
 
@@ -87,24 +88,24 @@ public class MemberSession implements MemberSessionLocal {
             } else {
                 throw new InvalidLoginCredentialException("Username does not exist or invalid password");
             }
-        } catch (NoResultException ex) {
+        } catch (ResourceNotFoundException ex) {
             throw new InvalidLoginCredentialException("Username does not exist or invalid password");
         }
     }
 
     @Override
-    public Member retrieveMemberByMemberId(Long memberId) throws NoResultException {
+    public Member retrieveMemberByMemberId(Long memberId) throws ResourceNotFoundException {
         Member member = em.find(Member.class, memberId);
 
         if (member != null) {
             return member;
         } else {
-            throw new NoResultException("Member ID " + memberId + " does not exist");
+            throw new ResourceNotFoundException("Member ID " + memberId + " does not exist");
         }
     }
 
     @Override
-    public void updateMember(Member updatedMember) throws NoResultException {
+    public void updateMember(Member updatedMember) throws ResourceNotFoundException {
         Member oldMember = retrieveMemberByMemberId(updatedMember.getId());
         
         // Do not allow change of username

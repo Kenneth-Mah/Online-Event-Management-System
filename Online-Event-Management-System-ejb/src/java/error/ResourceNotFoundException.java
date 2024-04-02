@@ -9,13 +9,13 @@ package error;
  *
  * @author kenne
  */
-public class NoResultException extends Exception {
+public class ResourceNotFoundException extends Exception {
 
     /**
      * Creates a new instance of <code>NoResultException</code> without detail
      * message.
      */
-    public NoResultException() {
+    public ResourceNotFoundException() {
     }
 
     /**
@@ -24,7 +24,7 @@ public class NoResultException extends Exception {
      *
      * @param msg the detail message.
      */
-    public NoResultException(String msg) {
+    public ResourceNotFoundException(String msg) {
         super(msg);
     }
 }

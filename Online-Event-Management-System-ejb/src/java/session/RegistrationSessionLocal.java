@@ -7,7 +7,7 @@ package session;
 
 import entity.Event;
 import entity.Registration;
-import error.NoResultException;
+import error.ResourceNotFoundException;
 import error.RegistrationDeletionNotAllowedException;
 import java.util.List;
 import javax.ejb.Local;
@@ -19,14 +19,14 @@ import javax.ejb.Local;
 @Local
 public interface RegistrationSessionLocal {
     
-    public void createRegistration(Long memberId, Long eventId) throws NoResultException;
+    public void createRegistration(Long memberId, Long eventId) throws ResourceNotFoundException;
     
-    public List<Event> retrieveRegisteredEventsByMemberId(Long memberId) throws NoResultException;
+    public List<Event> retrieveRegisteredEventsByMemberId(Long memberId) throws ResourceNotFoundException;
     
-    public void deleteRegistration(Long memberId, Long eventId) throws NoResultException, RegistrationDeletionNotAllowedException;
+    public void deleteRegistration(Long memberId, Long eventId) throws ResourceNotFoundException, RegistrationDeletionNotAllowedException;
     
-    public Registration retrieveRegistrationByRegistrationId(Long registrationId) throws NoResultException;
+    public Registration retrieveRegistrationByRegistrationId(Long registrationId) throws ResourceNotFoundException;
     
-    public void toggleAttendence(Long registrationId) throws NoResultException;
+    public void toggleAttendence(Long registrationId) throws ResourceNotFoundException;
     
 }

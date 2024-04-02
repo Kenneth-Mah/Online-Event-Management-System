@@ -6,6 +6,8 @@
 package managedbean;
 
 import entity.Member;
+import error.InputDataValidationException;
+import error.InvalidLoginCredentialException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -64,7 +66,7 @@ public class AuthenticationManagedBean implements Serializable {
             email = null;
 
             return "/secret/organisingEvents.xhtml?faces-redirect=true";
-        } catch (Exception ex) {
+        } catch (InputDataValidationException ex) {
             //signup failed
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Error", "Username already exists"));
@@ -82,7 +84,7 @@ public class AuthenticationManagedBean implements Serializable {
 
             //do redirect
             return "/secret/organisingEvents.xhtml?faces-redirect=true";
-        } catch (Exception ex) {
+        } catch (InvalidLoginCredentialException ex) {
             //login failed
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Error", "Username or password incorrect"));

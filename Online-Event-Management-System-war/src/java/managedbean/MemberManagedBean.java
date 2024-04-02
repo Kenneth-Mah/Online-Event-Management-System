@@ -6,6 +6,7 @@
 package managedbean;
 
 import entity.Member;
+import error.ResourceNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.inject.Named;
@@ -22,7 +23,6 @@ import javax.faces.view.ViewScoped;
 import javax.servlet.ServletContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
-import javax.servlet.http.Part;
 import org.primefaces.model.file.UploadedFile;
 import session.MemberSessionLocal;
 
@@ -65,7 +65,7 @@ public class MemberManagedBean implements Serializable {
             name = member.getName();
             phone = member.getPhone();
             email = member.getEmail();
-        } catch (Exception ex) {
+        } catch (ResourceNotFoundException ex) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Member does not exist"));
         }
     }
@@ -79,7 +79,7 @@ public class MemberManagedBean implements Serializable {
         try {
             memberSessionLocal.updateMember(member);
             return "/secret/viewProfile.xhtml?faces-redirect=true";
-        } catch (Exception ex) {
+        } catch (ResourceNotFoundException ex) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Unable to update member"));
             return null;
         }
@@ -109,7 +109,7 @@ public class MemberManagedBean implements Serializable {
         try {
             memberSessionLocal.updateMember(member);
             return "/secret/viewProfile.xhtml?faces-redirect=true";
-        } catch (Exception ex) {
+        } catch (ResourceNotFoundException ex) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Unable to update member"));
             return null;
         }

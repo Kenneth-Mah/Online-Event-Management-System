@@ -8,13 +8,14 @@ package session;
 import entity.Registration;
 import entity.Event;
 import entity.Member;
-import error.NoResultException;
+import error.ResourceNotFoundException;
 import error.RegistrationDeletionNotAllowedException;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -36,7 +37,7 @@ public class RegistrationSession implements RegistrationSessionLocal {
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     @Override
-    public void createRegistration(Long memberId, Long eventId) throws NoResultException {
+    public void createRegistration(Long memberId, Long eventId) throws ResourceNotFoundException {
         if (!doesRegistrationExist(memberId, eventId)) {
             Registration registration = new Registration();
 
@@ -52,7 +53,7 @@ public class RegistrationSession implements RegistrationSessionLocal {
         }
     }
 
-    private Boolean doesRegistrationExist(Long memberId, Long eventId) throws NoResultException {
+    private Boolean doesRegistrationExist(Long memberId, Long eventId) throws ResourceNotFoundException {
         Member member = memberSessionLocal.retrieveMemberByMemberId(memberId);
         Event event = eventSessionLocal.retrieveEventByEventId(eventId);
 
@@ -63,13 +64,13 @@ public class RegistrationSession implements RegistrationSessionLocal {
             Registration registration = (Registration) query.getSingleResult();
 
             return true;
-        } catch (Exception ex) {
+        } catch (NoResultException ex) {
             return false;
         }
     }
 
     @Override
-    public List<Event> retrieveRegisteredEventsByMemberId(Long memberId) throws NoResultException {
+    public List<Event> retrieveRegisteredEventsByMemberId(Long memberId) throws ResourceNotFoundException {
         Member member = memberSessionLocal.retrieveMemberByMemberId(memberId);
 
         Query query = em.createQuery("SELECT e FROM Event e, "
@@ -81,7 +82,7 @@ public class RegistrationSession implements RegistrationSessionLocal {
     }
 
     @Override
-    public void deleteRegistration(Long memberId, Long eventId) throws NoResultException, RegistrationDeletionNotAllowedException {
+    public void deleteRegistration(Long memberId, Long eventId) throws ResourceNotFoundException, RegistrationDeletionNotAllowedException {
         Member member = memberSessionLocal.retrieveMemberByMemberId(memberId);
         Event event = eventSessionLocal.retrieveEventByEventId(eventId);
 
@@ -105,18 +106,18 @@ public class RegistrationSession implements RegistrationSessionLocal {
     }
 
     @Override
-    public Registration retrieveRegistrationByRegistrationId(Long registrationId) throws NoResultException {
+    public Registration retrieveRegistrationByRegistrationId(Long registrationId) throws ResourceNotFoundException {
         Registration registration = em.find(Registration.class, registrationId);
         
         if (registration != null) {
             return registration;
         } else {
-            throw new NoResultException("Registration ID " + registrationId + " does not exist");
+            throw new ResourceNotFoundException("Registration ID " + registrationId + " does not exist");
         }
     }
 
     @Override
-    public void toggleAttendence(Long registrationId) throws NoResultException {
+    public void toggleAttendence(Long registrationId) throws ResourceNotFoundException {
         Registration registration = retrieveRegistrationByRegistrationId(registrationId);
         
         if (registration.getHasAttended() == true) {

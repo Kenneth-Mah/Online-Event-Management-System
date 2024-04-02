@@ -6,6 +6,7 @@
 package managedbean;
 
 import entity.Event;
+import error.ResourceNotFoundException;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
@@ -57,7 +58,7 @@ public class OrganiseEventManagedBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
             events = eventSessionLocal.retrieveOrganisingEventsByMemberId(authenticationManagedBean.getMemberId());
-        } catch (Exception ex) {
+        } catch (ResourceNotFoundException ex) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Member does not exist"));
         }
     }
@@ -76,7 +77,7 @@ public class OrganiseEventManagedBean implements Serializable {
             eventSessionLocal.createEvent(authenticationManagedBean.getMemberId(), newEvent);
             
             return "/secret/organisingEvents.xhtml?faces-redirect=true";
-        } catch (Exception ex) {
+        } catch (ResourceNotFoundException ex) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Error", "Member does not exist"));
             return null;
@@ -91,7 +92,7 @@ public class OrganiseEventManagedBean implements Serializable {
         Long eventId = Long.parseLong(eventIdStr);
         try {
             eventSessionLocal.deleteEvent(eventId);
-        } catch (Exception ex) {
+        } catch (ResourceNotFoundException ex) {
             //show with an error icon
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Unable to delete event"));
             return;
@@ -105,7 +106,7 @@ public class OrganiseEventManagedBean implements Serializable {
         try {
             registrationSessionLocal.toggleAttendence(registrationId);
             this.selectedEvent = eventSessionLocal.retrieveEventByEventId(this.selectedEvent.getId());
-        } catch (Exception ex) {
+        } catch (ResourceNotFoundException ex) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Unable to toggle attendence"));
         }
     }

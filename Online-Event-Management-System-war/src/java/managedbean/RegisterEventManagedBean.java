@@ -6,6 +6,8 @@
 package managedbean;
 
 import entity.Event;
+import error.RegistrationDeletionNotAllowedException;
+import error.ResourceNotFoundException;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
@@ -57,7 +59,7 @@ public class RegisterEventManagedBean implements Serializable {
         searchedEvents = eventSessionLocal.searchEventsByTitle(null);
         try {
             registeredEvents = registrationSessionLocal.retrieveRegisteredEventsByMemberId(authenticationManagedBean.getMemberId());
-        } catch (Exception ex) {
+        } catch (ResourceNotFoundException ex) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Member does not exist"));
         }
     }
@@ -84,7 +86,7 @@ public class RegisterEventManagedBean implements Serializable {
                     try {
                         Date date = dateFormat.parse(searchString);
                         searchedEvents = eventSessionLocal.searchEventsByDate(date);
-                    } catch (Exception ex) {
+                    } catch (ParseException ex) {
                         context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Format should be dd/mm/yyyy"));
                     }
                     break;
@@ -93,7 +95,7 @@ public class RegisterEventManagedBean implements Serializable {
                     try {
                         Date deadline = dateFormat.parse(searchString);
                         searchedEvents = eventSessionLocal.searchEventsByDeadline(deadline);
-                    } catch (Exception ex) {
+                    } catch (ParseException ex) {
                         context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Format should be dd/mm/yyyy"));
                     }
                     break;
@@ -110,7 +112,7 @@ public class RegisterEventManagedBean implements Serializable {
         try {
             registrationSessionLocal.createRegistration(authenticationManagedBean.getMemberId(), eventId);
             registeredEvents = registrationSessionLocal.retrieveRegisteredEventsByMemberId(authenticationManagedBean.getMemberId());
-        } catch (Exception ex) {
+        } catch (ResourceNotFoundException ex) {
             //show with an error icon
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Unable to register for event"));
             return;
@@ -127,7 +129,7 @@ public class RegisterEventManagedBean implements Serializable {
         try {
             registrationSessionLocal.deleteRegistration(authenticationManagedBean.getMemberId(), eventId);
             registeredEvents = registrationSessionLocal.retrieveRegisteredEventsByMemberId(authenticationManagedBean.getMemberId());
-        } catch (Exception ex) {
+        } catch (ResourceNotFoundException|RegistrationDeletionNotAllowedException ex) {
             //show with an error icon
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Unable to unregister from event"));
             return;

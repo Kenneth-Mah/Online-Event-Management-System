@@ -8,7 +8,7 @@ package session;
 import entity.Member;
 import error.InputDataValidationException;
 import error.InvalidLoginCredentialException;
-import error.NoResultException;
+import error.ResourceNotFoundException;
 import javax.ejb.Local;
 
 /**
@@ -20,12 +20,12 @@ public interface MemberSessionLocal {
     
     public Long createMember(Member newMember) throws InputDataValidationException;
     
-    public Member retrieveMemberByUsername(String username) throws NoResultException;
+    public Member retrieveMemberByUsername(String username) throws ResourceNotFoundException;
     
     public Long login(String username, String password) throws InvalidLoginCredentialException;
     
-    public Member retrieveMemberByMemberId(Long memberId) throws NoResultException;
+    public Member retrieveMemberByMemberId(Long memberId) throws ResourceNotFoundException;
     
-    public void updateMember(Member updatedMember) throws NoResultException;
+    public void updateMember(Member updatedMember) throws ResourceNotFoundException;
     
 }

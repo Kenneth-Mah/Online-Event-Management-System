@@ -7,7 +7,7 @@ package session;
 
 import entity.Event;
 import entity.Member;
-import error.NoResultException;
+import error.ResourceNotFoundException;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -33,7 +33,7 @@ public class EventSession implements EventSessionLocal {
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     @Override
-    public void createEvent(Long memberId, Event newEvent) throws NoResultException {
+    public void createEvent(Long memberId, Event newEvent) throws ResourceNotFoundException {
         Member member = memberSessionLocal.retrieveMemberByMemberId(memberId);
 
         newEvent.getOrganisingMembers().add(member);
@@ -43,7 +43,7 @@ public class EventSession implements EventSessionLocal {
     }
 
     @Override
-    public List<Event> retrieveOrganisingEventsByMemberId(Long memberId) throws NoResultException {
+    public List<Event> retrieveOrganisingEventsByMemberId(Long memberId) throws ResourceNotFoundException {
         Member member = memberSessionLocal.retrieveMemberByMemberId(memberId);
         Query query = em.createQuery(
                 "SELECT e FROM Event e "
@@ -55,18 +55,18 @@ public class EventSession implements EventSessionLocal {
     }
 
     @Override
-    public Event retrieveEventByEventId(Long eventId) throws NoResultException {
+    public Event retrieveEventByEventId(Long eventId) throws ResourceNotFoundException {
         Event event = em.find(Event.class, eventId);
 
         if (event != null) {
             return event;
         } else {
-            throw new NoResultException("Event ID " + eventId + " does not exist");
+            throw new ResourceNotFoundException("Event ID " + eventId + " does not exist");
         }
     }
 
     @Override
-    public Boolean isEventInUse(Long eventId) throws NoResultException {
+    public Boolean isEventInUse(Long eventId) throws ResourceNotFoundException {
         Event event = retrieveEventByEventId(eventId);
 
         if (event.getRegistrations().size() > 0) {
@@ -77,7 +77,7 @@ public class EventSession implements EventSessionLocal {
     }
 
     @Override
-    public void deleteEvent(Long eventId) throws NoResultException {
+    public void deleteEvent(Long eventId) throws ResourceNotFoundException {
         if (!isEventInUse(eventId)) {
             Event eventToRemove = retrieveEventByEventId(eventId);
 
