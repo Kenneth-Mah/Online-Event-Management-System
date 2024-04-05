@@ -64,7 +64,7 @@
                 <!-- password -->
                 <div class="form-group">
                   <h:outputLabel for="password">Password</h:outputLabel>
-                  <h:inputText binding="#{password}" id="password" value="#{authenticationManagedBean.password}" 
+                  <h:inputSecret binding="#{password}" id="password" value="#{authenticationManagedBean.password}" 
                                required="true" requiredMessage="Password is required" 
                                class="form-control #{password.valid ? '' :'is-invalid'}" />
                   <h:message for="password" class="invalid-feedback" />

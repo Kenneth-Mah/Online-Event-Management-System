@@ -83,7 +83,7 @@ public class AuthenticationManagedBean implements Serializable {
             password = null;
 
             //do redirect
-            return "/secret/organisingEvents.xhtml?faces-redirect=true";
+            return "/secret/organisingEvents2.xhtml?faces-redirect=true";
         } catch (InvalidLoginCredentialException ex) {
             //login failed
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,

@@ -37,7 +37,7 @@ public class AuthenticationFilter implements Filter {
         if (authenticationManagedBean == null || authenticationManagedBean.getMemberId() == -1L) {
             //redirect to login page if user is not logged in
             //and trying to access "secret/*" paths
-            ((HttpServletResponse) response).sendRedirect(request1.getContextPath() + "/login.xhtml");
+            ((HttpServletResponse) response).sendRedirect(request1.getContextPath() + "/login2.xhtml");
         } else {
             //authenticated - continue
             chain.doFilter(request1, response);
