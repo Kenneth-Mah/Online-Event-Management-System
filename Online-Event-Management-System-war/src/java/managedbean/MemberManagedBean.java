@@ -23,7 +23,7 @@ import javax.faces.view.ViewScoped;
 import javax.servlet.ServletContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
-import org.primefaces.model.file.UploadedFile;
+import javax.servlet.http.Part;
 import session.MemberSessionLocal;
 
 /**
@@ -47,7 +47,7 @@ public class MemberManagedBean implements Serializable {
     private String phone;
     private String email;
     
-    private UploadedFile uploadedfile;
+    private Part uploadedfile;
     private String filename = "";
 
     /**
@@ -94,7 +94,7 @@ public class MemberManagedBean implements Serializable {
         System.out.println("#UPLOAD_DIRECTORY : " + UPLOAD_DIRECTORY);
 
         //debug purposes
-        setFilename(uploadedfile.getFileName());
+        setFilename(Paths.get(uploadedfile.getSubmittedFileName()).getFileName().toString());
         System.out.println("filename: " + getFilename());
         //---------------------
         
@@ -155,11 +155,11 @@ public class MemberManagedBean implements Serializable {
         this.email = email;
     }
     
-    public UploadedFile getUploadedfile() {
+    public Part getUploadedfile() {
         return uploadedfile;
     }
 
-    public void setUploadedfile(UploadedFile uploadedfile) {
+    public void setUploadedfile(Part uploadedfile) {
         this.uploadedfile = uploadedfile;
     }
 
