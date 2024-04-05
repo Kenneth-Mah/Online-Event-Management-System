@@ -4,5 +4,6 @@
 build/
 nbbuild/
 dist/
+!**/web/dist/
 nbdist/
 .nb-gradle/
