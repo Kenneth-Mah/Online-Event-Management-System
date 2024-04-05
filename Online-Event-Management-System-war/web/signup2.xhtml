@@ -8,7 +8,7 @@
     <ui:composition template="./layout/default2.xhtml">
 
       <ui:define name="title">
-        Welcome to Event Explorer
+        Sign Up
       </ui:define>
 
       <ui:define name="content">
@@ -17,13 +17,16 @@
           <div class="container-fluid">
             <div class="row mb-2">
               <div class="col-sm-6">
-                <h1 class="m-0 text-dark">Welcome to Event Explorer</h1>
+                <h1 class="m-0 text-dark">Sign Up</h1>
               </div>
               <!-- /.col -->
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                  <li class="breadcrumb-item active">
+                  <li class="breadcrumb-item">
                     <a href="#{request.contextPath}">Home</a>
+                  </li>
+                  <li class="breadcrumb-item active">
+                    Sign Up
                   </li>
                 </ol>
               </div>
@@ -34,8 +37,19 @@
           <!-- /.container-fluid -->
         </div>
         <!-- /.content-header -->
-        <!-- Main content -->
+        
+         <!-- Main content -->
         <section class="content">
+          <!-- general form elements -->
+          <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title">
+                Sign Up
+              </h3>
+            </div>
+            <!-- /.card-header -->
+          </div>
+          <!-- /.card -->
         </section>
         <!-- /.content -->
       </ui:define>

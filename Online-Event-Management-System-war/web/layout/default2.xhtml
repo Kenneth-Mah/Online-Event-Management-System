@@ -4,36 +4,36 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
 
-    <h:head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title><ui:insert name="title">Title</ui:insert></title>
+  <h:head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title><ui:insert name="title">Title</ui:insert></title>
 
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="#{request.contextPath}/plugins/fontawesome-free/css/all.min.css" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="#{request.contextPath}/plugins/fontawesome-free/css/all.min.css" />
 
-        <!-- Daterange picker -->
-        <link rel="stylesheet" href="#{request.contextPath}/plugins/daterangepicker/daterangepicker.css"/>
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="#{request.contextPath}/plugins/daterangepicker/daterangepicker.css"/>
 
-        <!-- iCheck for checkboxes and radio inputs -->
-        <link rel="stylesheet" href="#{request.contextPath}/plugins/icheck-bootstrap/icheck-bootstrap.min.css" />
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link rel="stylesheet" href="#{request.contextPath}/plugins/icheck-bootstrap/icheck-bootstrap.min.css" />
 
-        <!-- Tempusdominus Bootstrap 4 (Date Picker) -->
-        <link rel="stylesheet" href="#{request.contextPath}/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css"/>
+    <!-- Tempusdominus Bootstrap 4 (Date Picker) -->
+    <link rel="stylesheet" href="#{request.contextPath}/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css"/>
 
-        <!-- DataTables -->
-        <link rel="stylesheet" href="#{request.contextPath}/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" />
-        <link rel="stylesheet" href="#{request.contextPath}/plugins/datatables-responsive/css/responsive.bootstrap4.min.css" />
+    <!-- DataTables -->
+    <link rel="stylesheet" href="#{request.contextPath}/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" href="#{request.contextPath}/plugins/datatables-responsive/css/responsive.bootstrap4.min.css" />
 
-        <!-- Theme style (comes with Bootstrap) -->
-        <link rel="stylesheet" href="#{request.contextPath}/dist/css/adminlte.min.css" />
+    <!-- Theme style (comes with Bootstrap) -->
+    <link rel="stylesheet" href="#{request.contextPath}/dist/css/adminlte.min.css" />
 
-        <!-- Google Font: Source Sans Pro -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&amp;display=fallback"/>
-    </h:head>
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&amp;display=fallback"/>
+  </h:head>
 
-    <h:body class="hold-transition sidebar-mini layout-fixed">
+  <h:body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
       <!-- Navbar -->
       <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -65,18 +65,18 @@
               <!-- Add icons to the links using the .nav-icon class
               with font-awesome or any other icon font library -->
               <li class="nav-item">
-                <a href="#{request.contextPath}/manageCustomer.xhtml" 
-                   class="nav-link #{(request.requestURI == '/CRM-war/manageCustomer.xhtml' and request.queryString == null) ? 'active' : ''}">
-                  <i class="nav-icon fa fa-plus-circle"></i>
+                <a href="#{request.contextPath}/login2.xhtml" 
+                   class="nav-link #{(request.requestURI == '/Online-Event-Management-System-war/login2.xhtml' and request.queryString == null) ? 'active' : ''}">
+                  <i class="nav-icon fas fa-sign-in-alt"></i>
                   <p>
                     Login
                   </p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#{request.contextPath}/searchCustomers2.xhtml" 
-                   class="nav-link #{request.requestURI == '/CRM-war/searchCustomers2.xhtml' ? 'active' : ''}">
-                  <i class="nav-icon fa fa-users"></i>
+                <a href="#{request.contextPath}/signup2.xhtml" 
+                   class="nav-link #{request.requestURI == '/Online-Event-Management-System-war/signup2.xhtml' ? 'active' : ''}">
+                  <i class="nav-icon fas fa-user-plus"></i>
                   <p>
                     Sign Up
                   </p>
@@ -94,7 +94,7 @@
         <ui:insert name="content">Content</ui:insert>
       </div>
       <!-- /.content-wrapper -->
-      
+
       <footer class="main-footer">
         <strong>Copyright &copy; IS3106 Studios.</strong> All rights
         reserved.
