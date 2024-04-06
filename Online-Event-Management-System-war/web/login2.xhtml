@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
   <body>
 
@@ -51,6 +52,8 @@
             <!-- /.card-header -->
             <!-- form start -->
             <h:form>
+              <h:messages showSummary="true" showDetail="true" class="toast-error" />
+              
               <div class="card-body">
                 <!-- username -->
                 <div class="form-group">
@@ -84,30 +87,6 @@
       </ui:define>
 
       <ui:define name="script">
-        <script>
-            //<![CDATA[
-            //Add the CDATA tag so that JSF will not have issues when using sensitive 
-            //symbols e.g. < and &
-
-            $(function () {
-              var Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000
-              });
-
-              $('.btn-primary').click(function () {
-                $(document).Toasts('create', {
-                  class: 'bg-danger',
-                  title: 'Toast Title',
-                  subtitle: 'Subtitle',
-                  body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-                })
-              });
-            });
-            //]]>
-        </script>
       </ui:define>
 
     </ui:composition>

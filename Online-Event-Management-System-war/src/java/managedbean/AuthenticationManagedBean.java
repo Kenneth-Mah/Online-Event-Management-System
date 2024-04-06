@@ -36,6 +36,8 @@ public class AuthenticationManagedBean implements Serializable {
     private String photo;
     private String phone;
     private String email;
+    
+    private String errorMessage;
 
     /**
      * Creates a new instance of AuthenticationManagedBean
@@ -88,6 +90,8 @@ public class AuthenticationManagedBean implements Serializable {
             //login failed
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Error", "Username or password incorrect"));
+            errorMessage = "Error: Username or password incorrect";
+
             memberId = -1L;
             username = null;
             password = null;
@@ -160,6 +164,14 @@ public class AuthenticationManagedBean implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 
 }
