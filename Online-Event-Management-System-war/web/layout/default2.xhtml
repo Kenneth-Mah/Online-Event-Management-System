@@ -57,7 +57,7 @@
       <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
         <a href="#{request.contextPath}" class="brand-link">
-          <img src="dist/img/logo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8" />
+          <img src="#{request.contextPath}/dist/img/logo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8" />
           <span class="brand-text font-weight-light">
             <b>Event</b>Explorer
           </span>
@@ -71,7 +71,7 @@
               with font-awesome or any other icon font library -->
               <li class="nav-item">
                 <a href="#{request.contextPath}/login2.xhtml" 
-                   class="nav-link #{(request.requestURI == '/Online-Event-Management-System-war/login2.xhtml' and request.queryString == null) ? 'active' : ''}">
+                   class="nav-link #{request.requestURI == '/Online-Event-Management-System-war/login2.xhtml' ? 'active' : ''}">
                   <i class="nav-icon fas fa-sign-in-alt"></i>
                   <p>
                     Login
