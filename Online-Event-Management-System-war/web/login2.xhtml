@@ -52,8 +52,11 @@
             <!-- /.card-header -->
             <!-- form start -->
             <h:form>
-              <h:messages showSummary="true" showDetail="true" class="toast-error" />
-              
+              <!-- Render message into hidden HTML elements -->
+              <h:panelGroup id="hiddenMessages" style="display:none">
+                <h:messages globalOnly="true" layout="list" styleClass="hiddenMessage" showSummary="false" showDetail="true" />
+              </h:panelGroup>
+
               <div class="card-body">
                 <!-- username -->
                 <div class="form-group">
@@ -87,6 +90,25 @@
       </ui:define>
 
       <ui:define name="script">
+        <script>
+            //<![CDATA[
+            //Add the CDATA tag so that JSF will not have issues when using sensitive 
+            //symbols e.g. < and &
+            
+            // Access hidden messages
+            var messages = document.querySelectorAll('.hiddenMessage li');
+            messages.forEach(function (message) {
+              console.log(message.innerText); // Display message content in console
+              console.log(message);
+              $(document).Toasts('create', {
+                class: 'bg-danger',
+                title: 'Error',
+                subtitle: '',
+                body: message.innerText
+              });
+            });
+            //]]>
+        </script>
       </ui:define>
 
     </ui:composition>

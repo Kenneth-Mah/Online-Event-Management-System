@@ -38,8 +38,8 @@
           <!-- /.container-fluid -->
         </div>
         <!-- /.content-header -->
-        
-         <!-- Main content -->
+
+        <!-- Main content -->
         <section class="content">
           <!-- general form elements -->
           <div class="card card-primary">
@@ -51,8 +51,11 @@
             <!-- /.card-header -->
             <!-- form start -->
             <h:form>
-              <h:messages showSummary="true" showDetail="true" class="toast-error" />
-              
+              <!-- Render message into hidden HTML elements -->
+              <h:panelGroup id="hiddenMessages" style="display:none">
+                <h:messages globalOnly="true" layout="list" styleClass="hiddenMessage" showSummary="false" showDetail="true" />
+              </h:panelGroup>
+
               <div class="card-body">
                 <!-- username -->
                 <div class="form-group">
@@ -71,31 +74,31 @@
                                  class="form-control #{inputPassword.valid ? '' :'is-invalid'}" />
                   <h:message for="inputPassword" class="invalid-feedback" />
                 </div>
-                
+
                 <!-- name -->
                 <div class="form-group">
                   <h:outputLabel for="inputName">Name</h:outputLabel>
                   <h:inputText binding="#{inputName}" id="inputName" value="#{authenticationManagedBean.name}" 
-                                 required="true" requiredMessage="Name is required" 
-                                 class="form-control #{inputName.valid ? '' :'is-invalid'}" />
+                               required="true" requiredMessage="Name is required" 
+                               class="form-control #{inputName.valid ? '' :'is-invalid'}" />
                   <h:message for="inputName" class="invalid-feedback" />
                 </div>
-                
+
                 <!-- phone -->
                 <div class="form-group">
                   <h:outputLabel for="inputPhone">Phone</h:outputLabel>
                   <h:inputText binding="#{inputPhone}" id="inputPhone" value="#{authenticationManagedBean.phone}" 
-                                 required="true" requiredMessage="Phone is required" 
-                                 class="form-control #{inputPhone.valid ? '' :'is-invalid'}" />
+                               required="true" requiredMessage="Phone is required" 
+                               class="form-control #{inputPhone.valid ? '' :'is-invalid'}" />
                   <h:message for="inputPhone" class="invalid-feedback" />
                 </div>
-                
+
                 <!-- email -->
                 <div class="form-group">
                   <h:outputLabel for="inputEmail">Email</h:outputLabel>
                   <h:inputText binding="#{inputEmail}" id="inputEmail" value="#{authenticationManagedBean.email}" 
-                                 required="true" requiredMessage="Email is required" 
-                                 class="form-control #{inputEmail.valid ? '' :'is-invalid'}" />
+                               required="true" requiredMessage="Email is required" 
+                               class="form-control #{inputEmail.valid ? '' :'is-invalid'}" />
                   <h:message for="inputEmail" class="invalid-feedback" />
                 </div>
                 <!-- /.card-body -->
@@ -113,6 +116,25 @@
       </ui:define>
 
       <ui:define name="script">
+        <script>
+            //<![CDATA[
+            //Add the CDATA tag so that JSF will not have issues when using sensitive 
+            //symbols e.g. < and &
+
+            // Access hidden messages
+            var messages = document.querySelectorAll('.hiddenMessage li');
+            messages.forEach(function (message) {
+              console.log(message.innerText); // Display message content in console
+              console.log(message);
+              $(document).Toasts('create', {
+                class: 'bg-danger',
+                title: 'Error',
+                subtitle: '',
+                body: message.innerText
+              });
+            });
+            //]]>
+        </script>
       </ui:define>
 
     </ui:composition>
