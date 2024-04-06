@@ -9,16 +9,11 @@ import entity.Member;
 import error.InputDataValidationException;
 import error.InvalidLoginCredentialException;
 import error.ResourceNotFoundException;
-import java.util.Set;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 
 /**
  *
@@ -30,38 +25,29 @@ public class MemberSession implements MemberSessionLocal {
     @PersistenceContext
     private EntityManager em;
 
-    private final ValidatorFactory validatorFactory;
-    private final Validator validator;
-
-    public MemberSession() {
-        validatorFactory = Validation.buildDefaultValidatorFactory();
-        validator = validatorFactory.getValidator();
-    }
-
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     @Override
     public Long createMember(Member newMember) throws InputDataValidationException {
-        Set<ConstraintViolation<Member>> constraintViolations = validator.validate(newMember);
+        String newUsername = newMember.getUsername();
 
-        if (constraintViolations.isEmpty()) {
+        if (!usernameInUse(newUsername)) {
             em.persist(newMember);
             em.flush();
 
             return newMember.getId();
         } else {
-            throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+            throw new InputDataValidationException("Member Username " + newUsername + " is already in use");
         }
     }
 
-    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Member>> constraintViolations) {
-        String msg = "Input data validation error!:";
-
-        for (ConstraintViolation constraintViolation : constraintViolations) {
-            msg += "\n\t" + constraintViolation.getPropertyPath() + " - " + constraintViolation.getInvalidValue() + "; " + constraintViolation.getMessage();
+    private Boolean usernameInUse(String newUsername) {
+        try {
+            retrieveMemberByUsername(newUsername);
+            return true;
+        } catch (ResourceNotFoundException ex) {
+            return false;
         }
-
-        return msg;
     }
 
     @Override

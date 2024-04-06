@@ -54,20 +54,20 @@
               <div class="card-body">
                 <!-- username -->
                 <div class="form-group">
-                  <h:outputLabel for="username">Username</h:outputLabel>
-                  <h:inputText binding="#{username}" id="username" value="#{authenticationManagedBean.username}" 
+                  <h:outputLabel for="inputUsername">Username</h:outputLabel>
+                  <h:inputText binding="#{inputUsername}" id="inputUsername" value="#{authenticationManagedBean.username}" 
                                required="true" requiredMessage="Username is required" 
-                               class="form-control #{username.valid ? '' :'is-invalid'}" />
-                  <h:message for="username" class="invalid-feedback" />
+                               class="form-control #{inputUsername.valid ? '' :'is-invalid'}" />
+                  <h:message for="inputUsername" class="invalid-feedback" />
                 </div>
 
                 <!-- password -->
                 <div class="form-group">
-                  <h:outputLabel for="password">Password</h:outputLabel>
-                  <h:inputSecret binding="#{password}" id="password" value="#{authenticationManagedBean.password}" 
-                               required="true" requiredMessage="Password is required" 
-                               class="form-control #{password.valid ? '' :'is-invalid'}" />
-                  <h:message for="password" class="invalid-feedback" />
+                  <h:outputLabel for="inputPassword">Password</h:outputLabel>
+                  <h:inputSecret binding="#{inputPassword}" id="inputPassword" value="#{authenticationManagedBean.password}" 
+                                 required="true" requiredMessage="Password is required" 
+                                 class="form-control #{inputPassword.valid ? '' :'is-invalid'}" />
+                  <h:message for="inputPassword" class="invalid-feedback" />
                 </div>
                 <!-- /.card-body -->
 
@@ -84,6 +84,30 @@
       </ui:define>
 
       <ui:define name="script">
+        <script>
+            //<![CDATA[
+            //Add the CDATA tag so that JSF will not have issues when using sensitive 
+            //symbols e.g. < and &
+
+            $(function () {
+              var Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+              });
+
+              $('.btn-primary').click(function () {
+                $(document).Toasts('create', {
+                  class: 'bg-danger',
+                  title: 'Toast Title',
+                  subtitle: 'Subtitle',
+                  body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+                })
+              });
+            });
+            //]]>
+        </script>
       </ui:define>
 
     </ui:composition>

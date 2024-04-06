@@ -65,7 +65,7 @@ public class AuthenticationManagedBean implements Serializable {
             phone = null;
             email = null;
 
-            return "/secret/organisingEvents.xhtml?faces-redirect=true";
+            return "/secret/organisingEvents2.xhtml?faces-redirect=true";
         } catch (InputDataValidationException ex) {
             //signup failed
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,

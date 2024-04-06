@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
 
   <body>
 
@@ -48,6 +49,61 @@
               </h3>
             </div>
             <!-- /.card-header -->
+            <!-- form start -->
+            <h:form>
+              <div class="card-body">
+                <!-- username -->
+                <div class="form-group">
+                  <h:outputLabel for="inputUsername">Username</h:outputLabel>
+                  <h:inputText binding="#{inputUsername}" id="inputUsername" value="#{authenticationManagedBean.username}" 
+                               required="true" requiredMessage="Username is required" 
+                               class="form-control #{inputUsername.valid ? '' :'is-invalid'}" />
+                  <h:message for="inputUsername" class="invalid-feedback" />
+                </div>
+
+                <!-- password -->
+                <div class="form-group">
+                  <h:outputLabel for="inputPassword">Password</h:outputLabel>
+                  <h:inputSecret binding="#{inputPassword}" id="inputPassword" value="#{authenticationManagedBean.password}" 
+                                 required="true" requiredMessage="Password is required" 
+                                 class="form-control #{inputPassword.valid ? '' :'is-invalid'}" />
+                  <h:message for="inputPassword" class="invalid-feedback" />
+                </div>
+                
+                <!-- name -->
+                <div class="form-group">
+                  <h:outputLabel for="inputName">Name</h:outputLabel>
+                  <h:inputText binding="#{inputName}" id="inputName" value="#{authenticationManagedBean.name}" 
+                                 required="true" requiredMessage="Name is required" 
+                                 class="form-control #{inputName.valid ? '' :'is-invalid'}" />
+                  <h:message for="inputName" class="invalid-feedback" />
+                </div>
+                
+                <!-- phone -->
+                <div class="form-group">
+                  <h:outputLabel for="inputPhone">Phone</h:outputLabel>
+                  <h:inputText binding="#{inputPhone}" id="inputPhone" value="#{authenticationManagedBean.phone}" 
+                                 required="true" requiredMessage="Phone is required" 
+                                 class="form-control #{inputPhone.valid ? '' :'is-invalid'}" />
+                  <h:message for="inputPhone" class="invalid-feedback" />
+                </div>
+                
+                <!-- email -->
+                <div class="form-group">
+                  <h:outputLabel for="inputEmail">Email</h:outputLabel>
+                  <h:inputText binding="#{inputEmail}" id="inputEmail" value="#{authenticationManagedBean.email}" 
+                                 required="true" requiredMessage="Email is required" 
+                                 class="form-control #{inputEmail.valid ? '' :'is-invalid'}" />
+                  <h:message for="inputEmail" class="invalid-feedback" />
+                </div>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                  <h:commandButton value="Sign Up" class="btn btn-primary float-right"
+                                   action="#{authenticationManagedBean.signup(evt)}" />
+                </div>
+              </div>
+            </h:form>
           </div>
           <!-- /.card -->
         </section>
