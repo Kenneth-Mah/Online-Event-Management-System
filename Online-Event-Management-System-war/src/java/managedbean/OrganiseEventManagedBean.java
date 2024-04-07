@@ -76,7 +76,7 @@ public class OrganiseEventManagedBean implements Serializable {
         try {
             eventSessionLocal.createEvent(authenticationManagedBean.getMemberId(), newEvent);
             
-            return "/secret/organisingEvents.xhtml?faces-redirect=true";
+            return "/secret/organisingEvents2.xhtml?faces-redirect=true";
         } catch (ResourceNotFoundException ex) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Error", "Member does not exist"));
