@@ -99,13 +99,15 @@ public class AuthenticationManagedBean implements Serializable {
         }
     }
 
-    public void logout(ActionEvent evt) {
+    public String logout(ActionEvent evt) {
         memberId = -1L;
         username = null;
         password = null;
         name = null;
         phone = null;
         email = null;
+        
+        return "/index.xhtml?faces-redirect=true";
     }
 
     public String getUsername() {
