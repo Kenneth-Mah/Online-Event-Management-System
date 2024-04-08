@@ -78,7 +78,7 @@ public class MemberManagedBean implements Serializable {
         member.setEmail(email);
         try {
             memberSessionLocal.updateMember(member);
-            return "/secret/viewProfile.xhtml?faces-redirect=true";
+            return "/secret/viewProfile2.xhtml?faces-redirect=true";
         } catch (ResourceNotFoundException ex) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Unable to update member"));
             return null;
@@ -108,7 +108,7 @@ public class MemberManagedBean implements Serializable {
         member.setPhoto(photo);
         try {
             memberSessionLocal.updateMember(member);
-            return "/secret/viewProfile.xhtml?faces-redirect=true";
+            return "/secret/viewProfile2.xhtml?faces-redirect=true";
         } catch (ResourceNotFoundException ex) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Unable to update member"));
             return null;
