@@ -8,6 +8,7 @@ package webservices.restful;
 import entity.Event;
 import entity.Member;
 import entity.Registration;
+import error.ResourceNotFoundException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,8 +16,10 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
@@ -154,6 +157,22 @@ public class EventsResource {
                     .build();
 
             return Response.status(Response.Status.BAD_REQUEST).entity(exception).build();
+        }
+    }
+    
+    @DELETE
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteCustomer(@PathParam("id") Long eventId) {
+        try {
+            eventSessionLocal.deleteEvent(eventId);
+            return Response.status(Response.Status.NO_CONTENT).build();
+        } catch (ResourceNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Event not found")
+                    .build();
+
+            return Response.status(Response.Status.NOT_FOUND).entity(exception).build();
         }
     }
 }
