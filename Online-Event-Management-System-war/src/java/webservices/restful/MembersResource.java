@@ -75,7 +75,7 @@ public class MembersResource {
     public Response createMember(Member newMember) {
         try {
             memberSessionLocal.createMember(newMember);
-            return Response.status(200).entity(
+            return Response.status(Response.Status.OK).entity(
                     newMember
             ).type(MediaType.APPLICATION_JSON).build();
         } catch (Exception ex) {
@@ -83,7 +83,7 @@ public class MembersResource {
                     .add("Error", "Username already exists")
                     .build();
 
-            return Response.status(409).entity(exception).build();
+            return Response.status(Response.Status.CONFLICT).entity(exception).build();
         }
     }
 
@@ -97,7 +97,7 @@ public class MembersResource {
 
         //from this userId, we can then get the data from the session bean accordingly
         System.out.println("userId : " + userId);
-        return Response.status(200).entity(
+        return Response.status(Response.Status.OK).entity(
                 null
         ).type(MediaType.APPLICATION_JSON).build();
     }
@@ -109,23 +109,23 @@ public class MembersResource {
         try {
             List<Event> results = eventSessionLocal.retrieveOrganisingEventsByMemberId(memberId);
             eventsRemoveCyclicReference(results);
-            
-            GenericEntity<List<Event>> entity = new GenericEntity<List<Event>>(results) {
-                };
 
-                return Response.status(200).entity(
-                        entity
-                ).build();
+            GenericEntity<List<Event>> entity = new GenericEntity<List<Event>>(results) {
+            };
+
+            return Response.status(Response.Status.OK).entity(
+                    entity
+            ).build();
         } catch (ResourceNotFoundException ex) {
             JsonObject exception = Json.createObjectBuilder()
-                        .add("error", "Member ID " + memberId + " does not exist")
-                        .build();
+                    .add("error", "Member ID " + memberId + " does not exist")
+                    .build();
 
-                return Response.status(400).entity(exception)
-                        .type(MediaType.APPLICATION_JSON).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
         }
     }
-    
+
     @GET
     @Path("/{id}/registered-events")
     @Produces(MediaType.APPLICATION_JSON)
@@ -133,20 +133,20 @@ public class MembersResource {
         try {
             List<Event> results = registrationSessionLocal.retrieveRegisteredEventsByMemberId(memberId);
             eventsRemoveCyclicReference(results);
-            
-            GenericEntity<List<Event>> entity = new GenericEntity<List<Event>>(results) {
-                };
 
-                return Response.status(200).entity(
-                        entity
-                ).build();
+            GenericEntity<List<Event>> entity = new GenericEntity<List<Event>>(results) {
+            };
+
+            return Response.status(Response.Status.OK).entity(
+                    entity
+            ).build();
         } catch (ResourceNotFoundException ex) {
             JsonObject exception = Json.createObjectBuilder()
-                        .add("error", "Member ID " + memberId + " does not exist")
-                        .build();
+                    .add("error", "Member ID " + memberId + " does not exist")
+                    .build();
 
-                return Response.status(400).entity(exception)
-                        .type(MediaType.APPLICATION_JSON).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
         }
     }
 }

@@ -83,7 +83,7 @@ public class EventsResource {
             GenericEntity<List<Event>> entity = new GenericEntity<List<Event>>(results) {
             };
 
-            return Response.status(200).entity(
+            return Response.status(Response.Status.OK).entity(
                     entity
             ).build();
         } else if (location != null) {
@@ -93,7 +93,7 @@ public class EventsResource {
             GenericEntity<List<Event>> entity = new GenericEntity<List<Event>>(results) {
             };
 
-            return Response.status(200).entity(
+            return Response.status(Response.Status.OK).entity(
                     entity
             ).build();
         } else if (description != null) {
@@ -103,7 +103,7 @@ public class EventsResource {
             GenericEntity<List<Event>> entity = new GenericEntity<List<Event>>(results) {
             };
 
-            return Response.status(200).entity(
+            return Response.status(Response.Status.OK).entity(
                     entity
             ).build();
         } else if (dateString != null) {
@@ -116,7 +116,7 @@ public class EventsResource {
                 GenericEntity<List<Event>> entity = new GenericEntity<List<Event>>(results) {
                 };
 
-                return Response.status(200).entity(
+                return Response.status(Response.Status.OK).entity(
                         entity
                 ).build();
             } catch (ParseException ex) {
@@ -124,7 +124,7 @@ public class EventsResource {
                         .add("error", "Date must be in dd-mm-yyyy format")
                         .build();
 
-                return Response.status(400).entity(exception)
+                return Response.status(Response.Status.BAD_REQUEST).entity(exception)
                         .type(MediaType.APPLICATION_JSON).build();
             }
         } else if (deadlineString != null) {
@@ -137,7 +137,7 @@ public class EventsResource {
                 GenericEntity<List<Event>> entity = new GenericEntity<List<Event>>(results) {
                 };
 
-                return Response.status(200).entity(
+                return Response.status(Response.Status.OK).entity(
                         entity
                 ).build();
             } catch (ParseException ex) {
@@ -145,7 +145,7 @@ public class EventsResource {
                         .add("error", "Deadline must be in dd-mm-yyyy format")
                         .build();
 
-                return Response.status(400).entity(exception)
+                return Response.status(Response.Status.BAD_REQUEST).entity(exception)
                         .type(MediaType.APPLICATION_JSON).build();
             }
         } else {
@@ -153,7 +153,7 @@ public class EventsResource {
                     .add("error", "No query conditions")
                     .build();
 
-            return Response.status(400).entity(exception).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(exception).build();
         }
     }
 }
