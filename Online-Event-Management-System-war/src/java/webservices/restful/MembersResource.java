@@ -8,6 +8,7 @@ package webservices.restful;
 import entity.Event;
 import entity.Member;
 import entity.Registration;
+import error.RegistrationDeletionNotAllowedException;
 import error.ResourceNotFoundException;
 import java.security.Principal;
 import java.util.List;
@@ -15,6 +16,7 @@ import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -164,6 +166,31 @@ public class MembersResource {
                     .build();
 
             return Response.status(Response.Status.BAD_REQUEST).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    }
+    
+    @DELETE
+    @Path("/{member_id}/registered-events/{event_id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response unregisterFromEvent(@PathParam("member_id") Long memberId, 
+            @PathParam("event_id") Long eventId) {
+        try {
+            registrationSessionLocal.deleteRegistration(memberId, eventId);
+            return Response.status(Response.Status.OK).build();
+        } catch (ResourceNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", ex.getMessage())
+                    .build();
+
+            return Response.status(Response.Status.NOT_FOUND).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        } catch (RegistrationDeletionNotAllowedException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Cannot unregister after start of event")
+                    .build();
+
+            return Response.status(Response.Status.FORBIDDEN).entity(exception)
                     .type(MediaType.APPLICATION_JSON).build();
         }
     }

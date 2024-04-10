@@ -92,14 +92,18 @@ public class RegistrationSession implements RegistrationSessionLocal {
             query.setParameter("member", member);
             query.setParameter("event", event);
 
-            Registration registration = (Registration) query.getSingleResult();
+            try {
+                Registration registration = (Registration) query.getSingleResult();
 
-            registration.setMember(null);
-            registration.setEvent(null);
-            member.getRegistrations().remove(registration);
-            event.getRegistrations().remove(registration);
+                registration.setMember(null);
+                registration.setEvent(null);
+                member.getRegistrations().remove(registration);
+                event.getRegistrations().remove(registration);
 
-            em.remove(registration);
+                em.remove(registration);
+            } catch (NoResultException ex) {
+                throw new ResourceNotFoundException("Registration does not exist");
+            }
         } else {
             throw new RegistrationDeletionNotAllowedException("Cannot unregister after start of event");
         }
@@ -108,7 +112,7 @@ public class RegistrationSession implements RegistrationSessionLocal {
     @Override
     public Registration retrieveRegistrationByRegistrationId(Long registrationId) throws ResourceNotFoundException {
         Registration registration = em.find(Registration.class, registrationId);
-        
+
         if (registration != null) {
             return registration;
         } else {
@@ -119,7 +123,7 @@ public class RegistrationSession implements RegistrationSessionLocal {
     @Override
     public void toggleAttendence(Long registrationId) throws ResourceNotFoundException {
         Registration registration = retrieveRegistrationByRegistrationId(registrationId);
-        
+
         if (registration.getHasAttended() == true) {
             registration.setHasAttended(false);
         } else {
