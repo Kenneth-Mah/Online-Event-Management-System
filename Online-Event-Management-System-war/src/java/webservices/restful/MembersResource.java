@@ -125,6 +125,24 @@ public class MembersResource {
                     .type(MediaType.APPLICATION_JSON).build();
         }
     }
+    
+    @POST
+    @Path("/{member_id}/organising-events/{event_id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response registerForEvent(@PathParam("member_id") Long memberId, 
+            @PathParam("event_id") Long eventId) {
+        try {
+            registrationSessionLocal.createRegistration(memberId, eventId);
+            return Response.status(Response.Status.OK).build();
+        } catch (ResourceNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Member or Event not found")
+                    .build();
+
+            return Response.status(Response.Status.NOT_FOUND).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    }
 
     @GET
     @Path("/{id}/registered-events")
