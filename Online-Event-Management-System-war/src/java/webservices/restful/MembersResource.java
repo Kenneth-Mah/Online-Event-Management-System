@@ -5,8 +5,12 @@
  */
 package webservices.restful;
 
+import entity.Event;
 import entity.Member;
+import entity.Registration;
+import error.ResourceNotFoundException;
 import java.security.Principal;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -14,12 +18,16 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import session.EventSessionLocal;
 import session.MemberSessionLocal;
+import session.RegistrationSessionLocal;
 
 /**
  * REST Web Service
@@ -31,7 +39,36 @@ public class MembersResource {
 
     @EJB
     private MemberSessionLocal memberSessionLocal;
-    
+    @EJB
+    private EventSessionLocal eventSessionLocal;
+    @EJB
+    private RegistrationSessionLocal registrationSessionLocal;
+
+    private void eventRemoveCyclicReference(Event event) {
+        List<Member> organisingMembers = event.getOrganisingMembers();
+        List<Registration> registrations = event.getRegistrations();
+
+        for (Member organisingMember : organisingMembers) {
+            organisingMember.setOrganisingEvents(null);
+            organisingMember.setRegistrations(null);
+            organisingMember.setPassword(null);
+        }
+        for (Registration registration : registrations) {
+            Member registeredMember = registration.getMember();
+            registeredMember.setOrganisingEvents(null);
+            registeredMember.setRegistrations(null);
+            registeredMember.setPassword(null);
+
+            registration.setEvent(null);
+        }
+    }
+
+    private void eventsRemoveCyclicReference(List<Event> events) {
+        for (Event event : events) {
+            eventRemoveCyclicReference(event);
+        }
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -49,7 +86,7 @@ public class MembersResource {
             return Response.status(409).entity(exception).build();
         }
     }
-    
+
     @GET
     @Secured
     @Path("/me")
@@ -63,5 +100,53 @@ public class MembersResource {
         return Response.status(200).entity(
                 null
         ).type(MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/{id}/organising-events")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOrganisingEvents(@PathParam("id") Long memberId) {
+        try {
+            List<Event> results = eventSessionLocal.retrieveOrganisingEventsByMemberId(memberId);
+            eventsRemoveCyclicReference(results);
+            
+            GenericEntity<List<Event>> entity = new GenericEntity<List<Event>>(results) {
+                };
+
+                return Response.status(200).entity(
+                        entity
+                ).build();
+        } catch (ResourceNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                        .add("error", "Member ID " + memberId + " does not exist")
+                        .build();
+
+                return Response.status(400).entity(exception)
+                        .type(MediaType.APPLICATION_JSON).build();
+        }
+    }
+    
+    @GET
+    @Path("/{id}/registered-events")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getRegisteredEvents(@PathParam("id") Long memberId) {
+        try {
+            List<Event> results = registrationSessionLocal.retrieveRegisteredEventsByMemberId(memberId);
+            eventsRemoveCyclicReference(results);
+            
+            GenericEntity<List<Event>> entity = new GenericEntity<List<Event>>(results) {
+                };
+
+                return Response.status(200).entity(
+                        entity
+                ).build();
+        } catch (ResourceNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                        .add("error", "Member ID " + memberId + " does not exist")
+                        .build();
+
+                return Response.status(400).entity(exception)
+                        .type(MediaType.APPLICATION_JSON).build();
+        }
     }
 }
