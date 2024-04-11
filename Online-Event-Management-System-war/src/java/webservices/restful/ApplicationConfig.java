@@ -33,6 +33,7 @@ public class ApplicationConfig extends Application {
         resources.add(webservices.restful.AuthenticationFilter.class);
         resources.add(webservices.restful.EventsResource.class);
         resources.add(webservices.restful.MembersResource.class);
+        resources.add(webservices.restful.RegistrationsResource.class);
     }
     
 }
